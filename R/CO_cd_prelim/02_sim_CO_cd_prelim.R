@@ -3,7 +3,7 @@
 
 # Set up the redistricting problem, including filtering, cores, and population tolerance
 CO_cd_prelim_setup_map = function(paths) {
-    co_shp = read_rds(paths$shp)
+    co_shp = read_rds(paths['shp'])
     co_map = redist_map(co_shp, existing_plan=cd, pop_tol=0.001)
 
     # return a list of `redist_map` objects that will be used in simulation
