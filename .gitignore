@@ -3,3 +3,28 @@
 .Rdata
 .httr-oauth
 .DS_Store
+
+data-raw/*
+!data-raw/README.md
+
+# intermediate files
+_targets
+
+# tex 
+*.pdf
+*.tmp
+*.aux
+*.log
+
+# misc
+*.bak
+*.swp
+
+# shapefiles should go in data-raw/
+*.shp
+*.shx
+*.dbf
+*.cpg
+*.prj
+*.sbn
+*.sbx

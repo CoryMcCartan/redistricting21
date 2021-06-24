@@ -1,6 +1,6 @@
-Package: redistricting
-Title: What the Package Does (One Line, Title Case)
-Version: 0.0.0.9000
+Package: redistricting21
+Title: 2021 Redistricting Analyses
+Version: 1.0.0
 Authors@R: c(
     person("Cory", "McCartan", email = "cmccartan@g.harvard.edu", role = c("aut", "cre")),
     person("Christopher T.", "Kenny", email = "christopherkenny@fas.harvard.edu", role = "aut"))
@@ -9,16 +9,20 @@ Description: Contains data, analyses, and reports of redistricting plans
     proposed or adopted as part of the 2021 redistricting cycle.
 Depends: R (>= 4.0.0)
 Imports: 
-    devtools,
     targets,
+    here,
     tidyverse,
     redist,
     geomander,
     sf,
     tigris,
-    httr
+    httr,
+    wacolors,
+    cli
+Suggests:
+    remotes,
+    rstudioapi
 License: file LICENSE
 Encoding: UTF-8
-LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.1
