@@ -40,7 +40,7 @@
         clean_plans()
 
     plans = bind_rows(plans, .id="sim")
-    path = "data/``STATE``/simulations.rds"
+    path = "data/``STATE``/sim_``SLUG``.rds"
     write_rds(plans, here(path), compress="xz")
 
     # return a named vector of simulation summary file paths

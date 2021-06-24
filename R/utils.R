@@ -64,7 +64,7 @@ clean_plans = function(pl) {
 get_analyses = function() {
     slugs = setdiff(list.dirs("R", recursive=F, full.names=FALSE), "template")
     d = tibble(slug=slugs) %>%
-        separate(slug, c("state", "type", "stage"), sep="_")
+        separate(slug, c("state", "type", "stage"), sep="_", remove=F)
     d$in_progress = file.exists(here("R", slugs, "in_progress"))
     d
 }
@@ -85,7 +85,7 @@ summarize_analysis_status = function() {
         labs(fill=NULL) +
         theme_void() +
         theme(legend.position="bottom")
-    ggsave("images/summary.svg", plot=p, width=5, height=4)
+    ggsave("images/summary.svg", plot=p, width=7, height=5)
 }
 
 
@@ -96,12 +96,12 @@ summarize_analysis_status = function() {
 #' @import readr
 #' @import tidyr
 #' @import stringr
-#' @import purrr
+#' @importFrom purrr map walk
 #' @import forcats
 #' @import ggplot2
 #' @import redist
 #' @import geomander
-#' @import rmapshaper
+#' @import rlang
 #' @import sf
 #' @import wacolors
 NULL

@@ -11,6 +11,7 @@ Depends: R (>= 4.0.0)
 Imports: 
     targets,
     here,
+    rlang,
     tidyverse,
     redist,
     geomander,
