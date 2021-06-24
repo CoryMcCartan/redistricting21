@@ -7,8 +7,11 @@
 data-raw/*
 !data-raw/README.md
 
-# intermediate files
-_targets
+# untracked intermediate files
+data/**/sim_*.rds
+data/**/sims_*.rds
+data/**/*_sim.rds
+data/**/*_sims.rds
 
 # tex 
 *.pdf

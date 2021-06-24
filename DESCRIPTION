@@ -9,9 +9,7 @@ Description: Contains data, analyses, and reports of redistricting plans
     proposed or adopted as part of the 2021 redistricting cycle.
 Depends: R (>= 4.0.0)
 Imports: 
-    targets,
     here,
-    rlang,
     tidyverse,
     redist,
     geomander,
@@ -26,7 +24,7 @@ Imports:
     wacolors,
     cli
 Suggests:
-    remotes,
+    devtools,
     rstudioapi
 License: file LICENSE
 Encoding: UTF-8

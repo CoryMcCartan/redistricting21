@@ -52,7 +52,8 @@ init = function(state, type="cd", stage="final", overwrite=F) {
 download = function(url, path) {
     dir = dirname(path)
     if (!dir.exists(dir)) dir.create(dir, recursive=TRUE)
-    httr::GET(url = url, httr::write_disk(path))
+    if (!file.exists(path))
+        httr::GET(url = url, httr::write_disk(path))
 }
 
 # Remove large objects from a `redist_plans` object.
@@ -68,7 +69,7 @@ clean_plans = function(pl) {
 get_analyses = function() {
     slugs = setdiff(list.dirs("R", recursive=F, full.names=FALSE), "template")
     d = tibble(slug=slugs) %>%
-        separate(slug, c("state", "type", "stage"), sep="_", remove=F)
+        separate(slug, c("state", "type", "stage"), sep="_", remove=F, extra="drop")
     d$in_progress = file.exists(here("R", slugs, "in_progress"))
     d
 }
@@ -100,12 +101,12 @@ summarize_analysis_status = function() {
 #' @import readr
 #' @import tidyr
 #' @import stringr
-#' @importFrom purrr map walk
+#' @import purrr
 #' @import forcats
 #' @import ggplot2
 #' @import redist
 #' @import geomander
-#' @import rlang
 #' @import sf
+#' @import rmapshaper
 #' @import wacolors
 NULL

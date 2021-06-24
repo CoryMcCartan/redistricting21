@@ -1,90 +1,24 @@
 # Prepare data for `CO_cd_prelim` analysis
 # © June 2021
 
-CO_cd_prelim_shp_path <- "data/CO/co_vtd_20.Rds"
+shp_path = "data/CO/CO_cd_prelim_vtd_20.rds"
 
-# Download necessary files for analysis and
 # compile raw data into a final shapefile for analysis
-CO_cd_prelim_prepare <- function(paths) {
-    # general vars ----
-    state_abb <- 'CO'
-    geo_year <- 2010
-    path <- str_glue('data/{state_abb}/co_vtd_20.Rds')
-
-    if (file.exists(here(path))) {
-        return(c(shp = path))
-    }
-
-    co_shp <- read_sf(here(paths['shp'])) %>%
-        ms_simplify(keep = 0.04, keep_shapes = TRUE)
-
-    # preparation and processing code
-
-    # libs ----
+prepare = function(paths) {
     library(blockpop)
 
-    # speed ----
-    sf::sf_use_s2(FALSE)
-
-    # check out inputs ----
-    prop <- st_read(paths['shp'])
-    pop <- read_csv(file = paths['pop']) %>%
-        slice(-201063) # removes a colsums final row
-
-    # Get some geographies for blocks
-    blk_geog <- create_block_table(state = state_abb, year = 2010)
-
-    # connect data
-    blk <- blk_geog %>% left_join(pop %>% rename(GEOID = GEOID10), by = 'GEOID')
-    blk <- janitor::clean_names(blk)
-
-    # Download files
-    shp_url <- 'https://redistricting.colorado.gov/rails/active_storage/blobs/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBBcU1CIiwiZXhwIjpudWxsLCJwdXIiOiJibG9iX2lkIn19--cc64f0d661b52f4e5fd422a5f8207e694520e006/CO_Congressional_Districts_Prelim_Final_SHP.zip'
-    shp_path <- 'data-raw/CO/CO_Congressional_Districts_Prelim_Final_SHP/CO_Congressional_Districts_Prelim_Final_06_23_2021.shp'
-    td <- tempfile(fileext = '.zip')
-    download(shp_url, td)
-    zip::unzip(td, exdir = here('data-raw/CO'))
-
-    pop_url <- 'https://redistricting.colorado.gov/rails/active_storage/blobs/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBBcVlCIiwiZXhwIjpudWxsLCJwdXIiOiJibG9iX2lkIn19--cb7114124cc840a2533959c258c73d58e3b832eb/2020_Preliminary_Pop_Estimates_2010_Census_Blocks_06_23_2021_CSV.zip'
-    pop_path <- 'data-raw/CO/Colorado_Redistricting_Preliminary_Population_Estimates_Final_06_23_2021.csv'
-    td <- tempfile(fileext = '.zip')
-    download(pop_url, td)
-    zip::unzip(td, exdir = here('data-raw/CO'))
-
-    vtd_20_url <- 'https://www2.census.gov/geo/tiger/TIGER2020PL/LAYER/VTD/2020/tl_2020_08_vtd20.zip'
-    vtd_20_path <- 'data-raw/CO/tl_2020_08_vtd20.shp'
-    td <- tempfile(fileext = '.zip')
-    download(vtd_20_url, td)
-    zip::unzip(td, exdir = here('data-raw/CO'))
-
-    co_2018_url <- 'https://doi.org/10.7910/DVN/UBKYRU/PPH2WE'
-    co_2018_path <- 'data-raw/CO/co_2018.shp'
-    td <- tempfile(fileext = '.zip')
-    writeBin(dataverse::get_file_by_doi(co_2018_url), con = td)
-    zip::unzip(td, exdir = here('data-raw/CO'))
-
-    co_2016_url <- 'https://doi.org/10.7910/DVN/NH5S2I/XSXFA1'
-    co_2016_path <- 'data-raw/CO/co_2016.shp'
-    td <- tempfile(fileext = '.zip')
-    writeBin(dataverse::get_file_by_doi(co_2016_url), con = td)
-    zip::unzip(td, exdir = here('data-raw/CO'))
-
-    # return a named vector of downloaded file paths
-    paths
-    if (file.exists(CO_cd_prelim_shp_path)) return(CO_cd_prelim_shp_path)
-    co_shp <- read_sf(here(paths["shp"])) %>%
-        ms_simplify(keep = 0.04, keep_shapes = TRUE)
-
-    # speed ----
-    sf::sf_use_s2(FALSE)
-
-    # general vars ----
-    state_abb <- 'CO'
+    state_abb <- "CO"
     geo_year <- 2010
 
+    co_shp = read_sf(here(paths$shp)) %>%
+        ms_simplify(keep=0.04, keep_shapes=TRUE)
+
+    # speed ----
+    sf::sf_use_s2(FALSE)
+
     # check out inputs ----
-    prop <- st_read(shp_path)
-    pop <- read_csv(file = pop_path) %>%
+    prop <- st_read(paths$shp)
+    pop <- read_csv(file = paths$pop) %>%
         slice(-201063) # removes a colsums final row
 
     # Get some geographies for blocks
@@ -93,7 +27,6 @@ CO_cd_prelim_prepare <- function(paths) {
     # connect data
     blk <- blk_geog %>% left_join(pop %>% rename(GEOID = GEOID10), by = 'GEOID')
     blk <- janitor::clean_names(blk)
-
 
     # transform projections
     blk <- blk %>% st_transform(st_crs(prop))
@@ -109,7 +42,7 @@ CO_cd_prelim_prepare <- function(paths) {
     blk_vtd_match <- geo_match(from = blk, to = vtd, method = 'centroid')
     vtd_dist_match <- geo_match(from = vtd, to = prop, method = 'area')
 
-    vtd20 <- st_read(vtd_20_path) %>% st_transform(st_crs(prop))
+    vtd20 <- st_read(paths$vtd_20) %>% st_transform(st_crs(prop))
     blk_vtd20_match <- geo_match(from = blk, to = vtd20, method = 'centroid')
     vtd20_dist_match <- geo_match(from = vtd20, to = prop, method = 'area')
 
@@ -118,7 +51,7 @@ CO_cd_prelim_prepare <- function(paths) {
 
     # Voting and Election Science Team, 2018, "2016 Precinct-Level Election Results",
     # https://doi.org/10.7910/DVN/NH5S2I, Harvard Dataverse, V60
-    prec16 <- st_read(str_glue(co_2016_path)) %>%
+    prec16 <- st_read(str_glue(paths$co_16)) %>%
         st_transform(st_crs(prop)) %>%
         rename(
             dem_16_pres = G16PREDCLI, rep_16_pres = G16PRERTRU,
@@ -126,7 +59,7 @@ CO_cd_prelim_prepare <- function(paths) {
         )
     # Voting and Election Science Team, 2019, "2018 Precinct-Level Election Results",
     # https://doi.org/10.7910/DVN/UBKYRU, Harvard Dataverse, V39
-    prec18 <- st_read(str_glue(co_18_path)) %>%
+    prec18 <- st_read(str_glue(paths$co_18)) %>%
         st_transform(st_crs(prop)) %>%
         rename(
             dem_18_gov = G18GOVDPOL, rep_18_gov = G18GOVRSTA,
@@ -189,8 +122,8 @@ CO_cd_prelim_prepare <- function(paths) {
         left_join(blk_at_vtd, by = 'vtd20') %>%
           mutate(cd = prop$cd[vtd20_dist_match])
 
-    write_rds(co_final_shp, here(CO_cd_prelim_shp_path), compress = 'xz')
+    write_rds(co_final_shp, here(shp_path), compress="xz")
 
     # return path to processed file
-    CO_cd_prelim_shp_path
+    shp_path
 }
