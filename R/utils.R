@@ -49,7 +49,11 @@ init = function(state, type="cd", stage="final", overwrite=F) {
 
 
 # Download `url` to path. Backend-agnostic (currently `httr`)
-download = function(url, path) httr::GET(url = url, httr::write_disk(path))
+download = function(url, path) {
+    dir = dirname(path)
+    if (!dir.exists(dir)) dir.create(dir, recursive=TRUE)
+    httr::GET(url = url, httr::write_disk(path))
+}
 
 # Remove large objects from a `redist_plans` object.
 clean_plans = function(pl) {
