@@ -17,7 +17,8 @@
 
 # Compile raw data into a final shapefile for analysis
 ``SLUG``_prepare = function(paths) {
-    ``state``_shp = read_sf(here(paths$shp))
+    ``state``_shp = read_sf(here(paths$shp)) %>%
+        ms_simplify(keep=0.04, keep_shapes=TRUE)
 
     # preparation and processing code
 

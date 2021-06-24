@@ -69,6 +69,7 @@ clean_plans = function(pl) {
 #' @import ggplot2
 #' @import redist
 #' @import geomander
+#' @import rmapshaper
 #' @import sf
 #' @import wacolors
 NULL

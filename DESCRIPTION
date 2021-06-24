@@ -16,6 +16,7 @@ Imports:
     geomander,
     sf,
     tigris,
+    rmapshaper,
     httr,
     wacolors,
     cli
