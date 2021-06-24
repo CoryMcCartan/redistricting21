@@ -3,8 +3,8 @@
 
 # Set up the redistricting problem, including filtering, cores, and population tolerance
 # Simulate redistricting plans
-simulate = function(path) {
-    ``state``_shp = read_rds(path)
+simulate = function(shp_path) {
+    ``state``_shp = read_rds(here(shp_path))
     ``state``_map = redist_map(``state``_shp, existing_plan=cd, pop_tol=0.01)
 
     plans = redist_smc(set_pop_tol(``state``_map, 0.01),

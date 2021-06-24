@@ -51,7 +51,7 @@ prepare = function(paths) {
 
     # Voting and Election Science Team, 2018, "2016 Precinct-Level Election Results",
     # https://doi.org/10.7910/DVN/NH5S2I, Harvard Dataverse, V60
-    prec16 <- st_read(str_glue(paths$co_16)) %>%
+    prec16 <- st_read(here(paths$co_16)) %>%
         st_transform(st_crs(prop)) %>%
         rename(
             dem_16_pres = G16PREDCLI, rep_16_pres = G16PRERTRU,
@@ -59,7 +59,7 @@ prepare = function(paths) {
         )
     # Voting and Election Science Team, 2019, "2018 Precinct-Level Election Results",
     # https://doi.org/10.7910/DVN/UBKYRU, Harvard Dataverse, V39
-    prec18 <- st_read(str_glue(paths$co_18)) %>%
+    prec18 <- st_read(here(paths$co_18)) %>%
         st_transform(st_crs(prop)) %>%
         rename(
             dem_18_gov = G18GOVDPOL, rep_18_gov = G18GOVRSTA,
@@ -95,7 +95,9 @@ prepare = function(paths) {
 
 
     # fcc ----
-    fcc <- bl_load_state(state_abb)
+    fcc_path = here("data-raw/shared/fcc.csv")
+    if (!file.exists(fcc_path)) bl_download_fcc(fcc_path)
+    fcc <- bl_load_state(state_abb, fcc_path)
     fcc_20 <- bl_est_2020(fcc)
     acs <- bl_download_acs_vars(state_abb)
     census <- bl_download_2010_vars(state_abb)
