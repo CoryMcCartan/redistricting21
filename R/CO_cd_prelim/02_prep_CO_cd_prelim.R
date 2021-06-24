@@ -36,11 +36,11 @@ prepare = function(paths) {
     blk$cd <- blk_dist_match
 
     # voting districts:
-    vtd <- tigris::voting_districts(state = state_abb)
-    vtd <- vtd %>% st_transform(st_crs(prop))
+    #vtd <- tigris::voting_districts(state = state_abb)
+    #vtd <- vtd %>% st_transform(st_crs(prop))
 
-    blk_vtd_match <- geo_match(from = blk, to = vtd, method = 'centroid')
-    vtd_dist_match <- geo_match(from = vtd, to = prop, method = 'area')
+    #blk_vtd_match <- geo_match(from = blk, to = vtd, method = 'centroid')
+    #vtd_dist_match <- geo_match(from = vtd, to = prop, method = 'area')
 
     vtd20 <- st_read(paths$vtd_20) %>% st_transform(st_crs(prop))
     blk_vtd20_match <- geo_match(from = blk, to = vtd20, method = 'centroid')
@@ -122,7 +122,7 @@ prepare = function(paths) {
     co_final_shp <- vtd20 %>%
         mutate(vtd20 = row_number()) %>%
         left_join(blk_at_vtd, by = 'vtd20') %>%
-          mutate(cd = prop$cd[vtd20_dist_match])
+          mutate(cd = prop$DISTRICT[vtd20_dist_match])
 
     write_rds(co_final_shp, here(shp_path), compress="xz")
 
