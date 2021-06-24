@@ -70,7 +70,7 @@ get_analyses = function() {
 }
 
 # Make a map of analyses
-summarize_analyses = function() {
+summarize_analysis_status = function() {
     usa = tigris::states(cb=TRUE, resolution="20m") %>%
         tigris::shift_geometry() %>%
         select(state=STUSPS, name=NAME, fips=GEOID, geometry)
@@ -85,7 +85,7 @@ summarize_analyses = function() {
         labs(fill=NULL) +
         theme_void() +
         theme(legend.position="bottom")
-    ggsave("images/summary.svg", plot=p, width=4, height=3.5)
+    ggsave("images/summary.svg", plot=p, width=5, height=4)
 }
 
 

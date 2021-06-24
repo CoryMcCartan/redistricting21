@@ -8,5 +8,5 @@
 Contains data, analyses, and reports of redistricting plans proposed or adopted
 as part of the 2021 redistricting cycle.
 
-<img alt="Summary of analyses" src="images/summary.svg" style="width: 100%">
+<img alt="Summary of analyses" src="images/summary.svg" width=100%>
 
