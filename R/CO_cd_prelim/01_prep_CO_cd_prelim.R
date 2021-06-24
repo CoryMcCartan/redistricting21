@@ -4,30 +4,17 @@
 # Download necessary files for analysis
 CO_cd_prelim_download <- function() {
   shp_url <- 'https://redistricting.colorado.gov/rails/active_storage/blobs/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBBcU1CIiwiZXhwIjpudWxsLCJwdXIiOiJibG9iX2lkIn19--cc64f0d661b52f4e5fd422a5f8207e694520e006/CO_Congressional_Districts_Prelim_Final_SHP.zip'
-  shp_path <- 'data-raw/CO/CO_Congressional_Districts_Prelim_Final_SHP/CO_Congressional_Districts_Prelim_Final_06_23_2021.shp' # don't use here()
+  shp_path <- 'data-raw/CO/CO_Congressional_Districts_Prelim_Final_SHP/CO_Congressional_Districts_Prelim_Final_06_23_2021.shp'
   download(shp_url, here(shp_path))
 
-  baf_url <- NULL
-  baf_path <- NULL
-  #download(baf_url, here(baf_path))
-
   # return a named vector of downloaded file paths
-  c(shp = shp_path, baf = baf_path)
+  c(shp = shp_path)
 }
 
 # Compile raw data into a final shapefile for analysis
 CO_cd_prelim_prepare <- function(paths) {
   co_shp <- read_sf(here(paths$shp)) %>%
     ms_simplify(keep = 0.04, keep_shapes = TRUE)
-
-  # preparation and processing code
-
-  # libs ----
-  library(sf)
-  library(redist)
-  library(tidyverse)
-  library(geomander)
-  library(blockpop)
 
   # speed ----
   sf::sf_use_s2(FALSE)

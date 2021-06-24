@@ -18,6 +18,7 @@ Imports:
     sf,
     tigris,
     rmapshaper,
+    janitor,
     httr,
     wacolors,
     cli
