@@ -6,44 +6,11 @@ CO_cd_prelim_shp_path <- "data/CO/co_vtd_20.Rds"
 # Download necessary files for analysis and
 # compile raw data into a final shapefile for analysis
 CO_cd_prelim_prepare <- function(paths) {
+    if (file.exists(CO_cd_prelim_shp_path)) return(CO_cd_prelim_shp_path)
 
     # general vars ----
     state_abb <- 'CO'
     geo_year <- 2010
-    path <- str_glue('data/{state_abb}/co_vtd_20.Rds')
-
-    if (file.exists(here(path))) {
-        return(c(shp = path))
-    }
-
-  co_shp <- read_sf(here(paths['shp'])) %>%
-    ms_simplify(keep = 0.04, keep_shapes = TRUE)
-
-  # preparation and processing code
-
-  # libs ----
-  library(sf)
-  library(redist)
-  library(tidyverse)
-  library(geomander)
-  library(blockpop)
-
-  # speed ----
-  sf::sf_use_s2(FALSE)
-
-
-
-  # check out inputs ----
-  prop <- st_read(paths['shp'])
-  pop <- read_csv(file = paths['pop']) %>%
-    slice(-201063) # removes a colsums final row
-
-  # Get some geographies for blocks
-  blk_geog <- create_block_table(state = state_abb, year = 2010)
-
-  # connect data
-  blk <- blk_geog %>% left_join(pop %>% rename(GEOID = GEOID10), by = 'GEOID')
-  blk <- janitor::clean_names(blk)
 
     # Download files
     shp_url <- 'https://redistricting.colorado.gov/rails/active_storage/blobs/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBBcU1CIiwiZXhwIjpudWxsLCJwdXIiOiJibG9iX2lkIn19--cc64f0d661b52f4e5fd422a5f8207e694520e006/CO_Congressional_Districts_Prelim_Final_SHP.zip'
@@ -77,8 +44,6 @@ CO_cd_prelim_prepare <- function(paths) {
     zip::unzip(td, exdir = here('data-raw/CO'))
 
     # return a named vector of downloaded file paths
-    paths
-    if (file.exists(CO_cd_prelim_shp_path)) return(CO_cd_prelim_shp_path)
     co_shp <- read_sf(here(paths["shp"])) %>%
         ms_simplify(keep = 0.04, keep_shapes = TRUE)
 
