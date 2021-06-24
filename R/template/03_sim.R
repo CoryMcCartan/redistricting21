@@ -12,7 +12,7 @@ simulate = function(shp_path) {
 
     # return a list of `redist_plans` objects
     list(
-        map = map,
+        map = ``state``_map,
         plans = list(
             tol_01 = plans
         )

@@ -21,6 +21,7 @@ Imports:
     blockpop,
     dataverse,
     zip,
+    patchwork,
     wacolors,
     cli
 Suggests:

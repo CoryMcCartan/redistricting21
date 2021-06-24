@@ -20,7 +20,7 @@ analyze = function(out) {
     })
 
     plans = bind_rows(out$plans, .id="sim")
-    path = "data/``STATE``/sim_``SLUG``.rds"
+    path = "data/``STATE``/``SLUG``_results.rds"
     write_rds(plans, here(path), compress="xz")
 
     # return path to simulation summary files

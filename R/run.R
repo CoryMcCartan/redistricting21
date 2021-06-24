@@ -5,12 +5,14 @@ run_analysis = function(state, type="cd", stage="final", run_all=FALSE) {
     options(tidyverse.quiet=T, dplyr.summarise.inform=F)
     suppressMessages(library(here))
     suppressMessages(library(cli))
-    cli_h1("Running {.field {slug}}")
-    devtools::load_all(here("."))
+    suppressMessages(library(stringr))
 
     slug = str_glue("{state}_{type}_{stage}")
     path_r <- str_glue("R/{slug}/")
     if (!dir.exists(path_r)) stop("Analysis `", slug, "` does not exist.")
+
+    cli_h1("Running {.field {slug}}")
+    devtools::load_all(here("."))
 
     analysis = get_analyses() %>%
         filter(.data$state==state, .data$type==type, .data$stage==stage)
@@ -31,7 +33,7 @@ run_analysis = function(state, type="cd", stage="final", run_all=FALSE) {
     }
 
     sim_path = here("data", state, str_glue("{slug}_sims.rds"))
-    if (file.exists(sim_path)) {
+    if (file.exists(sim_path) && !run_all) {
         sims = read_rds(sim_path)
     } else {
         sims = get("simulate", run_env)(shp_path)

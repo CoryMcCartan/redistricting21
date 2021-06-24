@@ -109,4 +109,5 @@ summarize_analysis_status = function() {
 #' @import sf
 #' @import rmapshaper
 #' @import wacolors
+#' @import patchwork
 NULL
