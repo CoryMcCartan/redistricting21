@@ -14,6 +14,10 @@ init = function(state, type="cd", stage="final", overwrite=F) {
     dir.create(path_raw <- str_glue("data-raw/{state}/"), showWarnings=F)
     cli_alert_success("Creating '{path_raw}'")
 
+    write_file(as.character(Sys.Date()),
+               path_ip <- str_glue("R/{slug}/in_progress"))
+    cli_alert_success("Creating '{path_ip}'")
+
     templates = Sys.glob(here("R/template/*.R"))
 
     proc_template = function(path) {
@@ -54,6 +58,34 @@ clean_plans = function(pl) {
         `attr<-`("prec_pop", NULL) %>%
         `attr<-`("merge_idx", NULL) %>%
         `attr<-`("wgt", NULL)
+}
+
+# Return a data frame of analyses conducted
+get_analyses = function() {
+    slugs = setdiff(list.dirs("R", recursive=F, full.names=FALSE), "template")
+    d = tibble(slug=slugs) %>%
+        separate(slug, c("state", "type", "stage"), sep="_")
+    d$in_progress = file.exists(here("R", slugs, "in_progress"))
+    d
+}
+
+# Make a map of analyses
+summarize_analyses = function() {
+    usa = tigris::states(cb=TRUE, resolution="20m") %>%
+        tigris::shift_geometry() %>%
+        select(state=STUSPS, name=NAME, fips=GEOID, geometry)
+    analyses = get_analyses()
+
+    PAL = c(`Analyzed`="#465177", `In progress`="#E4C22B")
+    p = left_join(usa, analyses, by="state") %>%
+        mutate(status = if_else(in_progress, "In progress", "Analyzed")) %>%
+    ggplot(aes(fill=status)) +
+        geom_sf(color="black", size=0.25) +
+        scale_fill_manual(values=PAL, na.translate=FALSE) +
+        labs(fill=NULL) +
+        theme_void() +
+        theme(legend.position="bottom")
+    ggsave("images/summary.svg", plot=p, width=4, height=3.5)
 }
 
 
