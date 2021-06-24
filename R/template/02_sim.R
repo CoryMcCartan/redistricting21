@@ -30,6 +30,8 @@
         #pullback() %>%
         mutate(dev =  plan_parity(maps$``state``_01),
                comp = distr_compactness(maps$``state``_01),
+               county_splits = county_splits(maps$``state``_01, county),
+               town_splits = county_splits(maps$``state``_01, town),
                dem_16 = group_frac(maps$``state``_01, dem_16, dem_16 + gop_16),
                dem_20 = group_frac(maps$``state``_01, dem_20, dem_20 + gop_20),
                black = group_frac(maps$``state``_01, black),
@@ -38,8 +40,8 @@
         clean_plans()
 
     plans = bind_rows(plans, .id="sim")
-    path = here("data/``STATE``/simulations.rds")
-    write_rds(plans, path, compress="xz")
+    path = "data/``STATE``/simulations.rds"
+    write_rds(plans, here(path), compress="xz")
 
     # return a named vector of simulation summary file paths
     c(sims=path)

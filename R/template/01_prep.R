@@ -5,11 +5,11 @@
 ``SLUG``_download = function() {
     shp_url = ""
     shp_path = "data-raw/``STATE``/" # don't use here()
-    download(shp_url, shp_path)
+    download(shp_url, here(shp_path))
 
     baf_url = ""
     baf_path = "data-raw/``STATE``/"
-    download(baf_url, baf_path)
+    download(baf_url, here(baf_path))
 
     # return a named vector of downloaded file paths
     c(shp=shp_path, baf=baf_path)
