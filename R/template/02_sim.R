@@ -2,8 +2,8 @@
 # ``COPYRIGHT``
 
 # Set up the redistricting problem, including filtering, cores, and population tolerance
-``SLUG``_setup_map = function(paths) {
-    ``state``_shp = read_rds(paths$shp)
+``SLUG``_setup_map = function(path) {
+    ``state``_shp = read_rds(path)
     ``state``_map = redist_map(``state``_shp, existing_plan=cd, pop_tol=0.01)
 
     # return a list of `redist_map` objects that will be used in simulation
@@ -43,6 +43,6 @@
     path = "data/``STATE``/sim_``SLUG``.rds"
     write_rds(plans, here(path), compress="xz")
 
-    # return a named vector of simulation summary file paths
-    c(sims=path)
+    # return path to simulation summary files
+    path
 }
