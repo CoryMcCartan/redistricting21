@@ -11,8 +11,11 @@ CO_cd_prelim_prepare <- function(paths) {
     # general vars ----
     state_abb <- 'CO'
     geo_year <- 2010
-
-    # Download files
+    
+    # speed
+    sf::sf_use_s2(FALSE)
+    
+    # Download files ----
     shp_url <- 'https://redistricting.colorado.gov/rails/active_storage/blobs/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBBcU1CIiwiZXhwIjpudWxsLCJwdXIiOiJibG9iX2lkIn19--cc64f0d661b52f4e5fd422a5f8207e694520e006/CO_Congressional_Districts_Prelim_Final_SHP.zip'
     shp_path <- 'data-raw/CO/CO_Congressional_Districts_Prelim_Final_SHP/CO_Congressional_Districts_Prelim_Final_06_23_2021.shp'
     td <- tempfile(fileext = '.zip')
@@ -43,19 +46,17 @@ CO_cd_prelim_prepare <- function(paths) {
     writeBin(dataverse::get_file_by_doi(co_2016_url), con = td)
     zip::unzip(td, exdir = here('data-raw/CO'))
 
+    # prepare files ----
+    paths <- c(shp = shp_path, pop = pop_path, vtd_20 = vtd_20_path,
+               co_16 = co_2016_path, co_18 = co_2018_path)
+    
     # return a named vector of downloaded file paths
     co_shp <- read_sf(here(paths["shp"])) %>%
         ms_simplify(keep = 0.04, keep_shapes = TRUE)
 
-    # speed ----
-    sf::sf_use_s2(FALSE)
-
-    # general vars ----
-    state_abb <- 'CO'
-    geo_year <- 2010
 
     # check out inputs ----
-    prop <- st_read(shp_path)
+    prop <- st_read(here(shp_path))
     pop <- read_csv(file = pop_path) %>%
         slice(-201063) # removes a colsums final row
 
@@ -90,7 +91,7 @@ CO_cd_prelim_prepare <- function(paths) {
 
     # Voting and Election Science Team, 2018, "2016 Precinct-Level Election Results",
     # https://doi.org/10.7910/DVN/NH5S2I, Harvard Dataverse, V60
-    prec16 <- st_read(str_glue(co_2016_path)) %>%
+    prec16 <- st_read(here(co_2016_path)) %>%
         st_transform(st_crs(prop)) %>%
         rename(
             dem_16_pres = G16PREDCLI, rep_16_pres = G16PRERTRU,
@@ -98,7 +99,7 @@ CO_cd_prelim_prepare <- function(paths) {
         )
     # Voting and Election Science Team, 2019, "2018 Precinct-Level Election Results",
     # https://doi.org/10.7910/DVN/UBKYRU, Harvard Dataverse, V39
-    prec18 <- st_read(str_glue(co_18_path)) %>%
+    prec18 <- st_read(here(co_18_path)) %>%
         st_transform(st_crs(prop)) %>%
         rename(
             dem_18_gov = G18GOVDPOL, rep_18_gov = G18GOVRSTA,
