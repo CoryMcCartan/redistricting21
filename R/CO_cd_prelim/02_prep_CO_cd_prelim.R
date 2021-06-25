@@ -124,7 +124,10 @@ prepare = function(paths) {
         left_join(blk_at_vtd, by = 'vtd20') %>%
           mutate(cd = prop$DISTRICT[vtd20_dist_match])
 
-    write_rds(co_final_shp, here(shp_path), compress="xz")
+    co_map = redist_map(co_final_shp, existing_plan=cd,
+                        pop_tol=0.001, total_pop=e_pop)
+
+    write_rds(co_map, here(shp_path), compress="xz")
 
     # return path to processed file
     shp_path

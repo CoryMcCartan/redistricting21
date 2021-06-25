@@ -3,25 +3,23 @@
 
 # Analyze and summarize simulated plans
 # Returns a simulation-free summary frame with all the necessary data for visualization
-analyze = function(out) {
-    out$plans = map(out$plans, function(plans) {
-        plans %>%
+analyze = function(plans, map) {
+    plans = purrr::map(plans, function(p) {
+        p %>%
             #pullback() %>%
-            mutate(dev =  plan_parity(out$map),
-                   comp = distr_compactness(out$map),
-                   county_splits = county_splits(out$map, county),
-                   town_splits = county_splits(out$map, town),
-                   dem_16 = group_frac(out$map, dem_16, dem_16 + gop_16),
-                   dem_20 = group_frac(out$map, dem_20, dem_20 + gop_20),
-                   black = group_frac(out$map, black),
-                   hisp = group_frac(out$map, hisp),
-                   minority = group_frac(out$map, pop - white)) %>%
-            clean_plans()
+            mutate(dev =  plan_parity(map),
+                   comp = distr_compactness(map),
+                   county_splits = county_splits(map, county),
+                   dem_16 = group_frac(map, dem_16, dem_16 + gop_16),
+                   dem_20 = group_frac(map, dem_20, dem_20 + gop_20),
+                   black = group_frac(map, black),
+                   hisp = group_frac(map, hisp),
+                   minority = group_frac(map, pop - white))
     })
 
-    plans = bind_rows(out$plans, .id="sim")
+    pl = bind_rows(plans, .id="sim")
     path = "data/``STATE``/``SLUG``_results.rds"
-    write_rds(plans, here(path), compress="xz")
+    write_rds(pl, here(path), compress="xz")
 
     # return path to simulation summary files
     path

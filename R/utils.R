@@ -35,13 +35,13 @@ init = function(state, type="cd", stage="final", overwrite=F) {
 
     cli_alert_info("Copying scripts from templates...")
     cli_ul()
-    new_paths = map(templates, proc_template)
+    new_paths = purrr::map(templates, proc_template)
     cli_end()
 
     cli_alert_success("Initialization complete.")
 
     if (requireNamespace("rstudioapi", quietly=TRUE) && rstudioapi::isAvailable()) {
-        map(new_paths, rstudioapi::navigateToFile)
+        purrr::map(new_paths, rstudioapi::navigateToFile)
         rstudioapi::navigateToFile(new_paths[[1]])
     }
     invisible(NULL)
@@ -100,8 +100,8 @@ summarize_analysis_status = function() {
 #' @import dplyr
 #' @import readr
 #' @import tidyr
+#' @importFrom purrr map_dbl map_dfr
 #' @import stringr
-#' @import purrr
 #' @import forcats
 #' @import ggplot2
 #' @import redist

@@ -12,7 +12,10 @@ prepare = function(paths) {
 
     ``state``_final_shp = ...
 
-    write_rds(``state``_final_shp, here(shp_path), compress="xz")
+    ``state``_map = redist_map(``state``_final_shp, existing_plan=cd,
+                               pop_tol=0.01)
+
+    write_rds(``state``_map, here(shp_path), compress="xz")
 
     # return path to processed file
     shp_path

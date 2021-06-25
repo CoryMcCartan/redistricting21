@@ -41,7 +41,9 @@ run_analysis = function(state, type="cd", stage="final", run_all=FALSE) {
         write_rds(sims, sim_path, compress="xz")
     }
 
-    get("analyze", run_env)(sims)
+    map = read_rds(here(shp_path))
+    get("analyze", run_env)(sims, map)
+
     cli_alert_success("Plans analyzed.")
     invisible()
 }
