@@ -1,0 +1,34 @@
+{
+  "articles": [
+    {
+      "path": "about.html",
+      "title": "About this blog",
+      "description": "Some additional details about the blog",
+      "author": [],
+      "contents": "\r\n\r\n\r\n\r\n",
+      "last_modified": "2021-06-25T17:42:49-04:00"
+    },
+    {
+      "path": "CO_cd_prelim.html",
+      "title": "Colorado Preliminary Congressional Districts",
+      "description": "Colorado's Congressional Independent Redistricting Commission released a preliminary map for the 2022-2030 congressional district maps. We analyze this in the context of other possible maps drawn at the shapes for the 2020 voting tabulation districts.\n",
+      "author": [
+        {
+          "name": "Nora Jones",
+          "url": "https://example.com/norajones"
+        }
+      ],
+      "date": "`r Sys.Date()`",
+      "contents": "\r\n\r\n\r\n\r\n",
+      "last_modified": "2021-06-25T17:42:51-04:00"
+    },
+    {
+      "path": "index.html",
+      "title": "Redistricting Analysis 2021",
+      "author": [],
+      "contents": "\r\n\r\n\r\n\r\n",
+      "last_modified": "2021-06-25T17:42:53-04:00"
+    }
+  ],
+  "collections": ["posts/posts.json"]
+}
