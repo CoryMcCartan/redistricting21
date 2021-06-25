@@ -110,4 +110,5 @@ summarize_analysis_status = function() {
 #' @import rmapshaper
 #' @import wacolors
 #' @import patchwork
+#' @import ggrepel
 NULL
