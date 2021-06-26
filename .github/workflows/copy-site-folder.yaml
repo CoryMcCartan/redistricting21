@@ -1,6 +1,13 @@
+on:
+  push:
+    branches:
+      - master
+
+name: deploy
+
 jobs:
   deploy:
-    name: Deploy
+    name: deploy
     runs-on: ubuntu-latest
     steps:
 
@@ -13,5 +20,5 @@ jobs:
       env:
         REPO: self
         BRANCH: gh-pages
-        FOLDER: site
+        FOLDER: site/docs
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
