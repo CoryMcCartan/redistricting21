@@ -1,9 +1,23 @@
 ---
-title: "About this blog"
+title: "About"
 description: |
-  Some additional details about the blog
+  What is this? Who are we?
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
 ```
+
+# About the Blog
+We put this together to analyze redistricting plans as states release them, in context. In context means we will employ cutting edge redistricting simulation methodologies to create large numbers of alternative plans. This helps make better judgement about the quality of a proposed or finalized plan, by making comparisons to other plans which also respect municipal, state, and federal requirements for redistricting. This approach helps avoid confusion by minimizing the use of comparisons across places and times, though there will always be a need for some of that.
+
+We rely entirely on open source tools and data, so that anyone (with a bit of R familiarity) can replicate the analysis and make changes to it.
+
+We will attempt to cover as many state plans as we can.
+
+# About the Authors
+[Cory McCartan](https://corymccartan.github.io/) is a PhD Candidate in Statistics at Harvard University. ... cory write here ... He is the author of the R packages [blockpop](https://github.com/CoryMcCartan/blockpop), [wacolors](https://cran.r-project.org/web/packages/wacolors/index.html), and [adjustr](https://corymccartan.github.io/adjustr/).
+
+[Chris Kenny](https://www.christophertkenny.com/) is a PhD Candidate in Government at Harvard University. He studies redistricting and Census policy-making. He is the author of the R packages [geomander](https://christopherkenny.github.io/geomander/) and [ppmf](https://christopherkenny.github.io/ppmf/).
+
+The authors are members of the [Algorithm Assisted Redistricting Methodology (ALARM) Project ](https://alarm-redist.github.io/). Chris and Cory are coauthors of the R packages [redist](https://alarm-redist.github.io/redist/) (with Ben Fifield and Kosuke Imai) and [PL94171](https://corymccartan.github.io/PL94171/).
