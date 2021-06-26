@@ -17,7 +17,7 @@ prepare = function(paths) {
     sf::sf_use_s2(FALSE)
 
     # check out inputs ----
-    prop <- st_read(paths$shp)
+    prop <- st_read(here(paths$shp))
     pop <- read_csv(file = paths$pop) %>%
         slice(-201063) # removes a colsums final row
 
@@ -42,7 +42,7 @@ prepare = function(paths) {
     #blk_vtd_match <- geo_match(from = blk, to = vtd, method = 'centroid')
     #vtd_dist_match <- geo_match(from = vtd, to = prop, method = 'area')
 
-    vtd20 <- st_read(paths$vtd_20) %>% st_transform(st_crs(prop))
+    vtd20 <- st_read(here(paths$vtd_20)) %>% st_transform(st_crs(prop))
     blk_vtd20_match <- geo_match(from = blk, to = vtd20, method = 'centroid')
     vtd20_dist_match <- geo_match(from = vtd20, to = prop, method = 'area')
 

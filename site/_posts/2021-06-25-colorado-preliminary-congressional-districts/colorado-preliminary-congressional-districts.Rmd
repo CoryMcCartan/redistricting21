@@ -1,37 +1,156 @@
 ---
-title: "Colorado Preliminary Congressional Districts"
+title: The Colorado Preliminary Congressional Map is Fair
 description: |
-  Colorado's Congressional Independent Redistricting Commission released a preliminary map for the 2022-2030 congressional district maps. We analyze this in the context of other possible maps drawn at the shapes for the 2020 voting tabulation districts.
+  Colorado's Congressional Independent Redistricting Commission has released a 
+  preliminary map for the 2022-2030 congressional districts.
 author:
-  - name: Nora Jones
-    url: https://example.com/norajones
+  - name: Christopher T. Kenny
+    affiliation: Department of Government, Harvard University
+    url: https://www.christophertkenny.com/
+  - name: Cory McCartan
+    affiliation: Department of Statistics, Harvard University
+    url: https://corymccartan.github.io/
 date: 06-26-2021
 output:
   distill::distill_article:
     self_contained: false
-bibliography: biblio.yaml
+bibliography: biblio.bib
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE)
+knitr::opts_chunk$set(echo=FALSE, message=FALSE, warning=FALSE)
+
+library(here)
+devtools::load_all(here("."))
+
+analysis = run_analysis("CO", "cd", "prelim")
+map = analysis$map
+plans = analysis$results
 ```
 
-# Colorado Congressional Districts
-some intro
+```{r cd-map, fig.cap="The preliminary congressional districting plan.", fig.height=5}
+plot_cds(map, get_existing(map), COUNTYFP20, "CO")
+```
 
-# Data!
-Since the Commission provides population estimates at the 2010 block level, we start by building a block dataset using `geomander` [@geomander]. This has the shapes for each block along with the population and voting age populations by block. 
+On June 23, Colorado's brand-new independent redistricting commission released a 
+[preliminary redistricting plan](https://redistricting.colorado.gov/content/prelim-congressional-maps)
+for the state's congressional districts.  Due to its above-average population 
+growth, Colorado has gained an additional congressional seat since the last
+time districts were drawn, in 2011.
 
-Generally, we use a different definition of populations from what Colorado provides. We often treat race and ethnicity as one variable. However, Colorado's preliminary data follows the Census Bureau's choice of treating race separately from ethnicity. This means that Hispanic is separated from the standard race categories. Additionally, the preliminary estimates do not include voting age population. As such, we build additional data using the `blockpop` package [@blockpop], which uses the FCC's yearly block estimates of populations to estimate the 2020 population at the block level. This is fairly consistent and provides cleaner categories for 2020, but differs slightly from Colorado's choice of population estimates.
+Already, people on both sides of the aisle 
+[are less-than-thrilled](https://www.cpr.org/2021/06/23/a-congressional-district-for-the-north-denver-metro-thats-where-the-first-map-has-it/)
+with the proposed preliminary plans, citing concerns with district
+competitiveness. Some have suggested that the plan is slightly
+[biased to favor Republicans](https://www.politico.com/news/2021/06/23/redistricting-colorado-map-perlmutter-495830),
+potentially making it easier for them to gain seats and recapture the House.
 
-As for election data, we rely on the precinct data from the [Voting and Election Science Team](https://twitter.com/vest_team?lang=en), who produce some of the best redistricting data available. We average the Republican votes and Democratic votes across offices for 2016 by precinct across president and senate races [@vest:16]. We do the same across the elections for Governor, Attorney General, and Secretary of State elections in 2018 [@vest:18]. To match the demographic data, we project this data down to blocks, splitting it by the proportion of voting age population in each precinct.
+```{r co-map, layout="l-page", fig.width=12, fig.height=5, fig.cap="Partisan (2016 election) and demographic patterns in Colorado, with proposed districts overlaid."}
+plot_partisan(map, dem_16, rep_16) + plot_minority(map, e_pop_white/e_pop)
+```
 
-With all of this data estimated at the 2010 Census block level, we aggregate to 2020 voting districts. Using the 2020 Census's shapefiles, we can then approximate the redistricting process in Colorado. This gives us 3108 geographic units, which average 1,618 people per voting district under the 2010 data, 1860 people under the data from blockpop, and 1858 under the preliminary data from Colorado.
+But what constitutes a "fair" map in Colorado depends a lot how different
+types of voters are distributed, where cities are, and more.  What appears at 
+first to be a slightly GOP-friendly plan could in fact be a plan that is good
+for Democrats, relative to what might otherwise be expected. In other words,
+to talk about the Colorado plan, it's important to consider what the
+alternatives might be.
 
-Finally, Colorado provides the district shapefiles, but doesn't provide a block assignment file, typically called a "baf", which would match blocks to districts directly. Without this, we match blocks to districts by the area overlap of each voting district with the districts. Matching by area is imperfect, but this gives us a good starting point to consider the preliminary plan on 2020 geographies.
+We'll evaluate the Colorado plan by comparing it to 3,000 hypothetical other
+plans, which were drawn by a computer algorithm following the same rules that 
+the independent commission has to follow. 
 
+# Generating Plans
+Generating 3,000 hypothetical plans is not straightforward---there are vastly
+more ways to draw redistricting plans than there are atoms in the universe, and
+yet only a minuscule fraction of these plans satisfy all the relevant legal
+constraints.
+Here, we'll use a new algorithm [@mcca:imai:20], which randomly generates plans
+according to a specific statistical distribution. Reflecting
+[Colorado's redistricting criteria](https://redistricting.colorado.gov/content/congressional-redistricting),
+we ensure the generated plans:
 
+* Have districts with equal populations (at most 0.1% away from full equality).
+* Have geographically contiguous and compact districts.
+* Follow county lines as much as possible.
+* Don't use any information on incumbents.
+
+<aside>
+In line with the commission's findings, we do not require the creation of a 
+majority-minority district for compliance with the federal Voting Rights Act.
+</aside>
+
+Here are a few of the sampled plans: 
+
+```{r hyp-map, layout="l-page", fig.width=12, fig.height=10}
+plot_cds(map, as.matrix(plans)[,2], COUNTYFP20, "CO") +
+    plot_cds(map, as.matrix(plans)[,3], COUNTYFP20, "CO") +
+    plot_cds(map, as.matrix(plans)[,4], COUNTYFP20, "CO") +
+    plot_cds(map, as.matrix(plans)[,5], COUNTYFP20, "CO") 
+```
 
 # Analysis
-Cory edits here. Chris don't touch this rn to avoid merge conflict.
+Once we've generated the set of comparison plans, we can use past election
+data to estimate how congressional elections might have turned out under 
+each of these alternative plans.  The results of this calculation are plotted
+in Figure \@ref(fig:dem-distrs) below, for the 2016 and 2018 elections. Each dot
+represents a district in a possible plan, with blue dots representing
+Democratic-controlled districts and red dots Republican-controlled districts,
+and the districts are arranged by how Democratic they are.  The black lines show
+the estimated election results under the newly-proposed plan. When these lines
+are lower than their corresponding set of points, that indicates that the
+proposed district has fewer Democratic voters than would be expected under an
+average fair and neutral map.
 
+```{r dem-distrs, layout="l-body-outset", fig.width=9, fig.height=9, fig.cap="Democratic vote by district for the proposed plan and 3,000 alternative plans."}
+dem_distr_plot(plans)
+```
+
+What we see overall is a proposed set of districts that is very much in line 
+with what would be expected under a fair and neutral procedure.  The only
+consistent difference is a lower number of Democratic voters in two
+Republican-leaning districts, which is offset by slightly higher number of
+Democratic voters in the most competitive district.  This feature of the plan
+helps Democrats versus the counterfactual, which would lead to more reliable
+4-4 splits.
+
+***
+
+# Data
+Since the Commission provides population estimates at the 2010 block level, we
+start by building a block dataset using `geomander` [@geomander]. This has the
+shapes for each block along with the population and voting age populations by
+block.
+
+Generally, we use a different definition of populations from what Colorado
+provides. We often treat race and ethnicity as one variable. However, Colorado's
+preliminary data follows the Census Bureau's choice of treating race separately
+from ethnicity. This means that Hispanic is separated from the standard race
+categories. Additionally, the preliminary estimates do not include voting age
+population. As such, we build additional data using the `blockpop` package
+[@blockpop], which uses the [FCC's yearly block estimates](https://www.fcc.gov/staff-block-estimates) 
+of populations to estimate the 2020 population at the block level. This is
+fairly consistent and provides cleaner categories for 2020, but differs slightly
+from Colorado's choice of population estimates.
+
+As for election data, we rely on the precinct data from the [Voting and Election
+Science Team](https://twitter.com/vest_team?lang=en), who produce some of the
+best redistricting data available. We average the Republican votes and
+Democratic votes across offices for 2016 by precinct across president and senate
+races [@vest:16]. We do the same across the elections for Governor, Attorney
+General, and Secretary of State elections in 2018 [@vest:18]. To match the
+demographic data, we project this data down to blocks, splitting it by the
+proportion of voting age population in each precinct.
+
+With all of this data estimated at the 2010 Census block level, we aggregate to
+2020 voting districts. Using the 2020 Census's shapefiles, we can then
+approximate the redistricting process in Colorado. This gives us 3108 geographic
+units, which average 1,618 people per voting district under the 2010 data, 1860
+people under the data from blockpop, and 1858 under the preliminary data from
+Colorado.
+
+Finally, Colorado provides the district shapefiles, but doesn't provide a block
+assignment file (BAF), which would match blocks to districts directly. Without
+this, we match blocks to districts by the area overlap of each voting district
+with the districts. Matching by area is imperfect, but this gives us a good
+starting point to consider the preliminary plan on 2020 geographies.

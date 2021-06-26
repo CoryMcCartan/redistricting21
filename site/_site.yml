@@ -1,12 +1,18 @@
 name: "site"
 title: "Redistricting Analysis"
 description: |
-  Redistricting Analysis
-output_dir: "docs"
+    Analyses of redistricting plans proposed or adopted as part of the
+    2021 redistricting cycle.
+output_dir: docs
 navbar:
   right:
     - text: "Home"
       href: index.html
     - text: "About"
       href: about.html
-output: distill::distill_article
+    - icon: fab fa-github
+      href: https://github.com/CoryMcCartan/redistricting21
+output:
+  distill::distill_article:
+    self_contained: false
+repository_url: https://github.com/CoryMcCartan/redistricting21

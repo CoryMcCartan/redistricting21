@@ -1,4 +1,4 @@
-theme_r21 = theme_bw(base_size=10)
+theme_r21 = function() theme_bw(base_size=10)
 
 PAL_COAST = c("#7BAEA0", "#386276", "#3A4332", "#7A7D6F", "#D9B96E", "#BED4F0")
 PAL_LARCH = c("#D2A554", "#626B5D", "#8C8F9E", "#858753", "#A4BADF", "#D3BEAF")
@@ -12,20 +12,22 @@ dem_distr_plot = function(pl, ...) {
     dem_cols = names(pl)
     dem_cols = dem_cols[str_starts(dem_cols, "dem_")]
     p = purrr::map(dem_cols, function(col) {
-        redist.plot.distr_qtys(pl, !!rlang::sym(col), size=0.001, alpha=0.2) +
+        redist.plot.distr_qtys(pl, !!rlang::sym(col), size=0.001, alpha=0.2, color_thresh=0.5) +
             scale_y_continuous("Democratic two-party share",
                                labels=scales::percent) +
             geom_hline(yintercept=0.5, alpha=0.25) +
             labs(title=str_c("20", str_sub(col, 5)),
                  x="Districts, ordered by Democratic share") +
-            scale_color_manual(values=PAL[1]) +
-            guides(color=F)
+            #scale_color_manual(values=PAL[1]) +
+            scale_color_manual(values=GOP_DEM[c(1, 15)]) +
+            theme_r21() +
+            guides(color=F, lty=F)
     })
     wrap_plots(p, nrow=2) + plot_layout(guides="collect")
 }
 
-plot_cds = function(map, county, abbr, city=TRUE) {
-    plan = as.factor(redist:::color_graph(get_adj(map), as.integer(get_existing(map))))
+plot_cds = function(map, pl, county, abbr, city=FALSE) {
+    plan = as.factor(redist:::color_graph(get_adj(map), as.integer(pl)))
     places = suppressMessages(tigris::places(abbr, cb=TRUE))
     if (city) {
         cities = arrange(places, desc(ALAND)) %>%
@@ -42,7 +44,7 @@ plot_cds = function(map, county, abbr, city=TRUE) {
         summarize(is_coverage=TRUE)
     map %>%
         mutate(.plan = plan,
-               .distr = get_existing(.)) %>%
+               .distr = pl) %>%
         as_tibble() %>%
         st_as_sf() %>%
         group_by(.distr) %>%
@@ -67,11 +69,11 @@ plot_partisan = function(map, dem, rep) {
         st_as_sf() %>%
         group_by(.distr) %>%
         summarize(is_coverage=TRUE)
-    plot(co_map, {{dem}} / ({{dem}} + {{rep}})) +
+    plot(map, {{dem}} / ({{dem}} + {{rep}})) +
         geom_sf(data=distrs, inherit.aes=FALSE, fill=NA, size=0.5, color="#00000055") +
         scale_fill_gradientn("Democratic share", colors=GOP_DEM, labels=scales::percent) +
         theme(legend.key.height=unit(0.4, "cm"),
-              legend.key.width=unit(2, "cm"))
+              legend.key.width=unit(1.25, "cm"))
 }
 
 plot_minority = function(map, white) {
@@ -81,11 +83,11 @@ plot_minority = function(map, white) {
         st_as_sf() %>%
         group_by(.distr) %>%
         summarize(is_coverage=TRUE)
-    plot(co_map, {{white}}) +
+    plot(map, {{white}}) +
         geom_sf(data=distrs, inherit.aes=FALSE, fill=NA, size=0.5, color="#00000055") +
         scale_fill_wa_c("sound_sunset", name="Pct. white", labels=scales::percent) +
         theme(legend.key.height=unit(0.4, "cm"),
-              legend.key.width=unit(2, "cm"))
+              legend.key.width=unit(1.25, "cm"))
 }
 
 eff_gap_calc = function(pl, shifts=seq(-0.1, 0.1, by=0.01)) {

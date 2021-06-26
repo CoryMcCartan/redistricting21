@@ -9,7 +9,7 @@ run_analysis = function(state, type="cd", stage="final", run_all=FALSE) {
 
     slug = str_glue("{state}_{type}_{stage}")
     path_r <- str_glue("R/{slug}/")
-    if (!dir.exists(path_r)) stop("Analysis `", slug, "` does not exist.")
+    if (!dir.exists(here(path_r))) stop("Analysis `", slug, "` does not exist.")
 
     cli_h1("Running {.field {slug}}")
     devtools::load_all(here("."))

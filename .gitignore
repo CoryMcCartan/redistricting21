@@ -31,3 +31,11 @@ data/**/*_sims.rds
 *.prj
 *.sbn
 *.sbx
+
+# site stuff
+site/_posts/**/site_libs
+site/_posts/**/*_files
+site/_posts/**/*.html
+site/_posts/**/*.png
+!site/_posts/docs/*.html
+!site/_posts/docs/*.png

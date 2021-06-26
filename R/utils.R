@@ -67,7 +67,7 @@ clean_plans = function(pl) {
 
 # Return a data frame of analyses conducted
 get_analyses = function() {
-    slugs = setdiff(list.dirs("R", recursive=F, full.names=FALSE), "template")
+    slugs = setdiff(list.dirs(here("R"), recursive=F, full.names=FALSE), "template")
     d = tibble(slug=slugs) %>%
         separate(slug, c("state", "type", "stage"), sep="_", remove=F, extra="drop")
     d$in_progress = file.exists(here("R", slugs, "in_progress"))
