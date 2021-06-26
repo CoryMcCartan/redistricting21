@@ -32,20 +32,16 @@ run_analysis = function(state, type="cd", stage="final", run_all=FALSE) {
         cli_alert_success("Input files processed.")
     }
 
-    sim_path = here("data", state, str_glue("{slug}_sims.rds"))
+    sim_path = here("data", state, str_glue("{slug}_results.rds"))
+    map = read_rds(here(shp_path))
     if (file.exists(sim_path) && !run_all) {
         sims = read_rds(sim_path)
     } else {
-        sims = get("simulate", run_env)(shp_path)
-        cli_alert_success("Plans simulated.")
-        write_rds(sims, sim_path, compress="xz")
+        sims = get("simulate", run_env)(map)
+        cli_alert_success("Plans simulated and analyzed.")
     }
 
-    map = read_rds(here(shp_path))
-    get("analyze", run_env)(sims, map)
-
-    cli_alert_success("Plans analyzed.")
-    invisible()
+    list(map=map, results=sims)
 }
 
 # Install project dependencies (managed in DESCRIPTION)

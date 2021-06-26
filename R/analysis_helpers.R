@@ -68,7 +68,7 @@ plot_partisan = function(map, dem, rep) {
         group_by(.distr) %>%
         summarize(is_coverage=TRUE)
     plot(co_map, {{dem}} / ({{dem}} + {{rep}})) +
-        geom_sf(data=distrs, inherit.aes=FALSE, fill=NA, size=0.5, color="#00000044") +
+        geom_sf(data=distrs, inherit.aes=FALSE, fill=NA, size=0.5, color="#00000055") +
         scale_fill_gradientn("Democratic share", colors=GOP_DEM, labels=scales::percent) +
         theme(legend.key.height=unit(0.4, "cm"),
               legend.key.width=unit(2, "cm"))
