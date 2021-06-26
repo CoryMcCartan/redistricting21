@@ -1,0 +1,26 @@
+---
+title: "Colorado Preliminary Congressional Districts"
+description: |
+  Colorado's Congressional Independent Redistricting Commission released a preliminary map for the 2022-2030 congressional district maps. We analyze this in the context of other possible maps drawn at the shapes for the 2020 voting tabulation districts.
+author:
+  - name: Nora Jones
+    url: https://example.com/norajones
+date: 06-25-2021
+output:
+  distill::distill_article:
+    self_contained: false
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+# Colorado Congressional Districts
+some intro
+
+# Data!
+Chris edits here. Cory don't touch this rn to avoid merge conflict.
+
+# Analysis
+Cory edits here. Chris don't touch this rn to avoid merge conflict.
+
