@@ -1,5 +1,0 @@
----
-title: "Redistricting Analysis 2021"
-site: distill::distill_website
-listing: posts
----
