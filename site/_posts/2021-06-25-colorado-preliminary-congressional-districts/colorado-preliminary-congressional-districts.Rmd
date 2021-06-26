@@ -5,10 +5,11 @@ description: |
 author:
   - name: Nora Jones
     url: https://example.com/norajones
-date: 06-25-2021
+date: 06-26-2021
 output:
   distill::distill_article:
     self_contained: false
+bibliography: biblio.yaml
 ---
 
 ```{r setup, include=FALSE}
@@ -19,7 +20,17 @@ knitr::opts_chunk$set(echo = FALSE)
 some intro
 
 # Data!
-Chris edits here. Cory don't touch this rn to avoid merge conflict.
+Since the Commission provides population estimates at the 2010 block level, we start by building a block dataset using `geomander` [@geomander]. This has the shapes for each block along with the population and voting age populations by block. 
+
+Generally, we use a different definition of populations from what Colorado provides. We often treat race and ethnicity as one variable. However, Colorado's preliminary data follows the Census Bureau's choice of treating race separately from ethnicity. This means that Hispanic is separated from the standard race categories. Additionally, the preliminary estimates do not include voting age population. As such, we build additional data using the `blockpop` package [@blockpop], which uses the FCC's yearly block estimates of populations to estimate the 2020 population at the block level. This is fairly consistent and provides cleaner categories for 2020, but differs slightly from Colorado's choice of population estimates.
+
+As for election data, we rely on the precinct data from the [Voting and Election Science Team](https://twitter.com/vest_team?lang=en), who produce some of the best redistricting data available. We average the Republican votes and Democratic votes across offices for 2016 by precinct across president and senate races [@vest:16]. We do the same across the elections for Governor, Attorney General, and Secretary of State elections in 2018 [@vest:18]. To match the demographic data, we project this data down to blocks, splitting it by the proportion of voting age population in each precinct.
+
+With all of this data estimated at the 2010 Census block level, we aggregate to 2020 voting districts. Using the 2020 Census's shapefiles, we can then approximate the redistricting process in Colorado. This gives us 3108 geographic units, which average 1,618 people per voting district under the 2010 data, 1860 people under the data from blockpop, and 1858 under the preliminary data from Colorado.
+
+Finally, Colorado provides the district shapefiles, but doesn't provide a block assignment file, typically called a "baf", which would match blocks to districts directly. Without this, we match blocks to districts by the area overlap of each voting district with the districts. Matching by area is imperfect, but this gives us a good starting point to consider the preliminary plan on 2020 geographies.
+
+
 
 # Analysis
 Cory edits here. Chris don't touch this rn to avoid merge conflict.
