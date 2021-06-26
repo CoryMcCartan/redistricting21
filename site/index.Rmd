@@ -1,0 +1,5 @@
+---
+title: "Redistricting Analysis"
+site: distill::distill_website
+listing: posts
+---
