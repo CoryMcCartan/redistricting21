@@ -18,7 +18,7 @@ bibliography: biblio.bib
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo=FALSE, message=FALSE, warning=FALSE)
+knitr::opts_chunk$set(echo=FALSE, message=FALSE, warning=FALSE, dev="ragg_png")
 
 library(here)
 devtools::load_all(here("."))
@@ -102,7 +102,7 @@ are lower than their corresponding set of points, that indicates that the
 proposed district has fewer Democratic voters than would be expected under an
 average fair and neutral map.
 
-```{r dem-distrs, layout="l-body-outset", fig.width=9, fig.height=9, fig.cap="Democratic vote by district for the proposed plan and 3,000 alternative plans."}
+```{r dem-distrs, layout="l-body-outset", fig.width=8, fig.height=8.5, fig.cap="Democratic vote by district for the proposed plan and 3,000 alternative plans."}
 dem_distr_plot(plans)
 ```
 
@@ -113,6 +113,14 @@ Republican-leaning districts, which is offset by slightly higher number of
 Democratic voters in the most competitive district.  This feature of the plan
 helps Democrats versus the counterfactual, which would lead to more reliable
 4-4 splits.
+
+```{r seats-votes, layout="l-body-outset", fig.width=8, fig.height=4, fig.cap="Democratic seats versus votes across two elections. Actual map shown in blue."}
+plot_sv(map, plans)
+```
+
+```{r mean-med, layout="l-body-outset", fig.width=8, fig.height=4, fig.cap="Mean-median bias for the proposed plan and 3,000 alternative plans."}
+plot_mm(plans)
+```
 
 ***
 

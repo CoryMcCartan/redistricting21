@@ -106,3 +106,77 @@ eff_gap_calc = function(pl, shifts=seq(-0.1, 0.1, by=0.01)) {
 
     map_dfr(shifts, calc_egap)
 }
+
+plot_sv = function(map, pl) {
+    refs = unique(subset_ref(pl)$draw)
+
+    statewide = map %>%
+        as_tibble() %>%
+        summarize(across(starts_with("dem_"), sum),
+                  across(starts_with("rep_"), sum)) %>%
+        pivot_longer(c(starts_with("dem_"), starts_with("rep_")),
+                       names_to=c("party", "year"), names_sep="_",
+                     values_to="votes") %>%
+        pivot_wider(names_from=party, values_from=votes) %>%
+        mutate(year = 2000L + as.integer(year),
+               statewide = dem/(dem+rep)) %>%
+        select(-rep, -dem)
+
+    d_sv = pl %>%
+        select(sim, draw, district, starts_with("dem_")) %>%
+        pivot_longer(starts_with("dem_"), names_to="year", names_prefix="dem_",
+                     values_to="dem") %>%
+        mutate(year = 2000L + as.integer(year)) %>%
+        left_join(statewide, by="year") %>%
+        group_by(sim, year, draw) %>%
+        arrange(desc(dem), .by_group=TRUE) %>%
+        mutate(shift = 0.5 - dem,
+               pct_seats = row_number()/n(),
+               pct_votes = statewide + shift)
+
+    d_sv %>%
+        filter(!(draw %in% refs)) %>%
+    ggplot(aes(pct_votes, pct_seats, group=draw)) +
+        facet_wrap(~ year) +
+        geom_line(alpha=0.05, size=0.3, color="#888888") +
+        geom_hline(yintercept=0.5, lty="dashed") +
+        geom_vline(xintercept=0.5, lty="dashed") +
+        geom_line(data=filter(d_sv, draw %in% refs),
+                  color="black", size=1.2, alpha=1) +
+        geom_line(data=filter(d_sv, draw %in% refs),
+                  color=PAL[3], size=0.8, alpha=1) +
+        coord_equal(xlim=c(0.3, 0.7), ylim=c(0.3, 0.7)) +
+        scale_x_continuous("Democratic share of votes", labels=scales::percent) +
+        scale_y_continuous("Democratic share of seats", labels=scales::percent) +
+        theme_r21()
+}
+
+plot_mm = function(pl) {
+    refs = unique(subset_ref(pl)$draw)
+
+    d_mm = pl %>%
+        select(sim, draw, district, starts_with("dem_")) %>%
+        pivot_longer(starts_with("dem_"), names_to="year", names_prefix="dem_",
+                     values_to="dem") %>%
+        mutate(year = 2000L + as.integer(year)) %>%
+        group_by(sim, year, draw) %>%
+        summarize(meanmed = mean(dem) - median(dem))
+
+    xmin = floor(min(d_mm$meanmed) * 400) / 400
+    xmax = ceiling(max(d_mm$meanmed) * 400) / 400
+
+    d_mm %>%
+        filter(!(draw %in% refs)) %>%
+    ggplot(aes(meanmed, fill=meanmed<0.0)) +
+        facet_wrap(~ year) +
+        geom_histogram(aes(y = after_stat(count / sum(count))),
+                       breaks=seq(xmin, xmax, 0.0025)) +
+        geom_vline(aes(xintercept=meanmed), data=filter(d_mm, draw %in% refs),
+                   color="black", size=1.2) +
+        scale_x_continuous("Mean-median difference", labels=scales::percent) +
+        scale_y_continuous("Fraction of plans", labels=scales::percent,
+                           expand=expansion(mult=c(0, 0.05))) +
+        scale_fill_manual(values=c("TRUE"=GOP_DEM[14], "FALSE"=GOP_DEM[2])) +
+        guides(fill=F) +
+        theme_r21()
+}
