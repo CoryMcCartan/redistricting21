@@ -124,7 +124,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <!--/radix_placeholder_rmarkdown_metadata-->
   
   <script type="text/json" id="radix-resource-manifest">
-  {"type":"character","attributes":{},"value":["biblio.bib","colorado-preliminary-congressional-districts_files/anchor-4.2.2/anchor.min.js","colorado-preliminary-congressional-districts_files/bowser-1.9.3/bowser.min.js","colorado-preliminary-congressional-districts_files/distill-2.2.21/template.v2.js","colorado-preliminary-congressional-districts_files/figure-html5/cd-map-1.png","colorado-preliminary-congressional-districts_files/figure-html5/co-map-1.png","colorado-preliminary-congressional-districts_files/figure-html5/dem-distrs-1.png","colorado-preliminary-congressional-districts_files/figure-html5/hyp-map-1.png","colorado-preliminary-congressional-districts_files/header-attrs-2.8/header-attrs.js","colorado-preliminary-congressional-districts_files/jquery-1.11.3/jquery.min.js","colorado-preliminary-congressional-districts_files/popper-2.6.0/popper.min.js","colorado-preliminary-congressional-districts_files/tippy-6.2.7/tippy-bundle.umd.min.js","colorado-preliminary-congressional-districts_files/tippy-6.2.7/tippy-light-border.css","colorado-preliminary-congressional-districts_files/tippy-6.2.7/tippy.css","colorado-preliminary-congressional-districts_files/tippy-6.2.7/tippy.umd.min.js","colorado-preliminary-congressional-districts_files/webcomponents-2.0.0/webcomponents.js"]}
+  {"type":"character","attributes":{},"value":["biblio.bib","colorado-preliminary-congressional-districts_files/anchor-4.2.2/anchor.min.js","colorado-preliminary-congressional-districts_files/bowser-1.9.3/bowser.min.js","colorado-preliminary-congressional-districts_files/distill-2.2.21/template.v2.js","colorado-preliminary-congressional-districts_files/figure-html5/cd-map-1.png","colorado-preliminary-congressional-districts_files/figure-html5/co-map-1.png","colorado-preliminary-congressional-districts_files/figure-html5/dem-distrs-1.png","colorado-preliminary-congressional-districts_files/figure-html5/hyp-map-1.png","colorado-preliminary-congressional-districts_files/figure-html5/mean-med-1.png","colorado-preliminary-congressional-districts_files/figure-html5/seats-votes-1.png","colorado-preliminary-congressional-districts_files/header-attrs-2.8/header-attrs.js","colorado-preliminary-congressional-districts_files/jquery-1.11.3/jquery.min.js","colorado-preliminary-congressional-districts_files/popper-2.6.0/popper.min.js","colorado-preliminary-congressional-districts_files/tippy-6.2.7/tippy-bundle.umd.min.js","colorado-preliminary-congressional-districts_files/tippy-6.2.7/tippy-light-border.css","colorado-preliminary-congressional-districts_files/tippy-6.2.7/tippy.css","colorado-preliminary-congressional-districts_files/tippy-6.2.7/tippy.umd.min.js","colorado-preliminary-congressional-districts_files/webcomponents-2.0.0/webcomponents.js"]}
   </script>
   <!--radix_placeholder_navigation_in_header-->
 <meta name="distill:offset" content="../.."/>
@@ -2472,13 +2472,29 @@ In line with the commission’s findings, we do not require the creation of a ma
 <p>Once we’ve generated the set of comparison plans, we can use past election data to estimate how congressional elections might have turned out under each of these alternative plans. The results of this calculation are plotted in Figure <a href="#fig:dem-distrs">3</a> below, for the 2016 and 2018 elections. Each dot represents a district in a possible plan, with blue dots representing Democratic-controlled districts and red dots Republican-controlled districts, and the districts are arranged by how Democratic they are. The black lines show the estimated election results under the newly-proposed plan. When these lines are lower than their corresponding set of points, that indicates that the proposed district has fewer Democratic voters than would be expected under an average fair and neutral map.</p>
 <div class="layout-chunk" data-layout="l-body-outset">
 <div class="figure"><span id="fig:dem-distrs"></span>
-<img src="colorado-preliminary-congressional-districts_files/figure-html5/dem-distrs-1.png" alt="Democratic vote by district for the proposed plan and 3,000 alternative plans." width="864" />
+<img src="colorado-preliminary-congressional-districts_files/figure-html5/dem-distrs-1.png" alt="Democratic vote by district for the proposed plan and 3,000 alternative plans." width="768" />
 <p class="caption">
 Figure 3: Democratic vote by district for the proposed plan and 3,000 alternative plans.
 </p>
 </div>
 </div>
 <p>What we see overall is a proposed set of districts that is very much in line with what would be expected under a fair and neutral procedure. The only consistent difference is a lower number of Democratic voters in two Republican-leaning districts, which is offset by slightly higher number of Democratic voters in the most competitive district. This feature of the plan helps Democrats versus the counterfactual, which would lead to more reliable 4-4 splits.</p>
+<div class="layout-chunk" data-layout="l-body-outset">
+<div class="figure"><span id="fig:seats-votes"></span>
+<img src="colorado-preliminary-congressional-districts_files/figure-html5/seats-votes-1.png" alt="Democratic seats versus votes across two elections. Actual map shown in blue." width="768" />
+<p class="caption">
+Figure 4: Democratic seats versus votes across two elections. Actual map shown in blue.
+</p>
+</div>
+</div>
+<div class="layout-chunk" data-layout="l-body-outset">
+<div class="figure"><span id="fig:mean-med"></span>
+<img src="colorado-preliminary-congressional-districts_files/figure-html5/mean-med-1.png" alt="Mean-median bias for the proposed plan and 3,000 alternative plans." width="768" />
+<p class="caption">
+Figure 5: Mean-median bias for the proposed plan and 3,000 alternative plans.
+</p>
+</div>
+</div>
 <hr />
 <h1 id="data">Data</h1>
 <p>Since the Commission provides population estimates at the 2010 block level, we start by building a block dataset using <code>geomander</code> <span class="citation" data-cites="geomander">(<a href="#ref-geomander" role="doc-biblioref">Kenny 2021</a>)</span>. This has the shapes for each block along with the population and voting age populations by block.</p>
