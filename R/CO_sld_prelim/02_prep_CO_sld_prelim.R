@@ -92,8 +92,8 @@ prepare = function(paths) {
       dem_16 = estimate_down(wts = blk$vap, value = prec16$dem_16, group = blk_prec16_match),
       rep_18 = estimate_down(wts = blk$vap, value = prec18$rep_18, group = blk_prec18_match),
       dem_18 = estimate_down(wts = blk$vap, value = prec18$dem_18, group = blk_prec18_match),
-      rep_20 = estimate_down(wts = blk$vap, value = prec18$rep_20, group = blk_prec20_match),
-      dem_20 = estimate_down(wts = blk$vap, value = prec18$dem_20, group = blk_prec20_match)
+      rep_20 = estimate_down(wts = blk$vap, value = prec20$rep_20, group = blk_prec20_match),
+      dem_20 = estimate_down(wts = blk$vap, value = prec20$dem_20, group = blk_prec20_match)
     )
 
 
