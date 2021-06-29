@@ -30,6 +30,14 @@ download_files = function() {
     zip::unzip(td, exdir = here('data-raw/CO'))
   }
 
+  co_2020_url <- 'https://doi.org/10.7910/DVN/K7760H'
+  co_2020_path <- 'data-raw/CO/co_2020.shp'
+  if (!file.exists(here(co_2020_path))) {
+    td <- tempfile(fileext = '.zip')
+    writeBin(dataverse::get_file_by_name(filename = 'co_2020.zip', dataset = 'doi:10.7910/DVN/K7760H'), con = td)
+    zip::unzip(td, exdir = here('data-raw/CO'))
+  }
+
   co_2018_url <- 'https://doi.org/10.7910/DVN/UBKYRU/PPH2WE'
   co_2018_path <- 'data-raw/CO/co_2018.shp'
   if (!file.exists(here(co_2018_path))) {
@@ -49,6 +57,6 @@ download_files = function() {
   # return list of paths to downloaded file
   list(
     shp = shp_path, pop = pop_path, vtd_20 = vtd_20_path,
-    co_18 = co_2018_path, co_16 = co_2016_path
+    co_20 = co_2020_path, co_18 = co_2018_path, co_16 = co_2016_path
   )
 }

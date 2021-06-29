@@ -68,14 +68,32 @@ prepare = function(paths) {
       ) %>%
       ungroup()
 
+    # Voting and Election Science Team, 2020, "2020 Precinct-Level Election Results",
+    # https://doi.org/10.7910/DVN/K7760H, Harvard Dataverse, V12
+    prec20 <- st_read(here(paths$co_20)) %>%
+      st_transform(st_crs(co_shp)) %>%
+      rename(
+        dem_20_pres = G20PREDBID, rep_20_pres = G20PRERTRU,
+        dem_20_uss = G20USSDHIC, rep_20_uss = G20USSRGAR,
+      ) %>%
+      rowwise() %>%
+      mutate(
+        dem_20 = mean(c_across(cols = starts_with('dem_20'))),
+        rep_20 = mean(c_across(cols = starts_with('rep_20')))
+      ) %>%
+      ungroup()
+
     blk_prec16_match <- geo_match(from = blk, to = prec16, method = 'centroid')
     blk_prec18_match <- geo_match(from = blk, to = prec18, method = 'centroid')
+    blk_prec20_match <- geo_match(from = blk, to = prec20, method = 'centroid')
 
     blk <- blk %>% mutate(
       rep_16 = estimate_down(wts = blk$vap, value = prec16$rep_16, group = blk_prec16_match),
       dem_16 = estimate_down(wts = blk$vap, value = prec16$dem_16, group = blk_prec16_match),
       rep_18 = estimate_down(wts = blk$vap, value = prec18$rep_18, group = blk_prec18_match),
-      dem_18 = estimate_down(wts = blk$vap, value = prec18$dem_18, group = blk_prec18_match)
+      dem_18 = estimate_down(wts = blk$vap, value = prec18$dem_18, group = blk_prec18_match),
+      rep_20 = estimate_down(wts = blk$vap, value = prec18$rep_20, group = blk_prec20_match),
+      dem_20 = estimate_down(wts = blk$vap, value = prec18$dem_20, group = blk_prec20_match)
     )
 
 
