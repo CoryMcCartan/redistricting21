@@ -1,0 +1,64 @@
+# Download data for `CO_sld_prelim` analysis
+# © June 2021
+
+# Download necessary files for analysis
+
+# compile raw data into a final shapefile for analysis
+download_files <- function() {
+  # Download files
+  shp_up_url <- 'https://redistricting.colorado.gov/rails/active_storage/blobs/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBBcndCIiwiZXhwIjpudWxsLCJwdXIiOiJibG9iX2lkIn19--fb3b40c71129854829f3fa165c5efac4b8aed7c8/CO_Senate_Districts_Prelim_Final.zip'
+  shp_up_path <- 'data-raw/CO/CO_Senate_Districts_Prelim_Final/CO_Senate_Districts_Prelim_Final.shp'
+  if (!file.exists(here(shp_up_path))) {
+    td <- tempfile(fileext = '.zip')
+    download(shp_up_url, td)
+    zip::unzip(td, exdir = here('data-raw/CO'))
+  }
+
+  shp_low_url <- 'https://redistricting.colorado.gov/rails/active_storage/blobs/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBBcnNCIiwiZXhwIjpudWxsLCJwdXIiOiJibG9iX2lkIn19--d742b6642659d784e404125b07a156e352dc83de/CO_House_Districts_Prelim_Final.zip'
+  shp_low_path <- 'data-raw/CO/CO_House_Districts_Prelim_Final/CO_House_Districts_Final.shp'
+  if (!file.exists(here(shp_low_path))) {
+    td <- tempfile(fileext = '.zip')
+    download(shp_low_url, td)
+    zip::unzip(td, exdir = here('data-raw/CO'))
+  }
+
+  pop_url <- 'https://redistricting.colorado.gov/rails/active_storage/blobs/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBBcVlCIiwiZXhwIjpudWxsLCJwdXIiOiJibG9iX2lkIn19--cb7114124cc840a2533959c258c73d58e3b832eb/2020_Preliminary_Pop_Estimates_2010_Census_Blocks_06_23_2021_CSV.zip'
+  pop_path <- 'data-raw/CO/Colorado_Redistricting_Preliminary_Population_Estimates_Final_06_23_2021.csv'
+  if (!file.exists(here(pop_path))) {
+    td <- tempfile(fileext = '.zip')
+    download(pop_url, td)
+    zip::unzip(td, exdir = here('data-raw/CO'))
+  }
+
+
+  vtd_20_url <- 'https://www2.census.gov/geo/tiger/TIGER2020PL/LAYER/VTD/2020/tl_2020_08_vtd20.zip'
+  vtd_20_path <- 'data-raw/CO/tl_2020_08_vtd20.shp'
+  if (!file.exists(here(vtd_20_path))) {
+    td <- tempfile(fileext = '.zip')
+    download(vtd_20_url, td)
+    zip::unzip(td, exdir = here('data-raw/CO'))
+  }
+
+  co_2018_url <- 'https://doi.org/10.7910/DVN/UBKYRU/PPH2WE'
+  co_2018_path <- 'data-raw/CO/co_2018.shp'
+  if (!file.exists(here(co_2018_path))) {
+    td <- tempfile(fileext = '.zip')
+    writeBin(dataverse::get_file_by_doi(co_2018_url), con = td)
+    zip::unzip(td, exdir = here('data-raw/CO'))
+  }
+
+  co_2016_url <- 'https://doi.org/10.7910/DVN/NH5S2I/XSXFA1'
+  co_2016_path <- 'data-raw/CO/co_2016.shp'
+  if (!file.exists(here(co_2016_path))) {
+    td <- tempfile(fileext = '.zip')
+    writeBin(dataverse::get_file_by_doi(co_2016_url), con = td)
+    zip::unzip(td, exdir = here('data-raw/CO'))
+  }
+
+  # return list of paths to downloaded file
+  list(
+    shp_ssd = shp_up_path, shp_shd = shp_low_path,
+    pop = pop_path, vtd_20 = vtd_20_path,
+    co_18 = co_2018_path, co_16 = co_2016_path
+  )
+}

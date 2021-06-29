@@ -1,7 +1,7 @@
 # Prepare data for `CO_cd_prelim` analysis
 # © June 2021
 
-shp_path = "data/CO/CO_cd_prelim_vtd_20.rds"
+shp_path = "data/CO/CO_prelim_vtd_20.rds"
 
 # compile raw data into a final shapefile for analysis
 prepare = function(paths) {
@@ -16,8 +16,11 @@ prepare = function(paths) {
     # speed ----
     sf::sf_use_s2(FALSE)
 
+
+    if (file.exists(here(shp_path))) {
+        co_final_shp <- read_rds(here(shp_path))
+    } else {
     # check out inputs ----
-    prop <- st_read(here(paths$shp))
     pop <- read_csv(file = paths$pop) %>%
         slice(-201063) # removes a colsums final row
 
@@ -29,45 +32,21 @@ prepare = function(paths) {
     blk <- janitor::clean_names(blk)
 
     # transform projections
-    blk <- blk %>% st_transform(st_crs(prop))
-
-    # match! ----
-    blk_dist_match <- geo_match(from = blk, to = prop, method = 'centroid')
-    blk$cd <- blk_dist_match
+    blk <- blk %>% st_transform(st_crs(co_shp))
 
     # voting districts:
-    #vtd <- tigris::voting_districts(state = state_abb)
-    #vtd <- vtd %>% st_transform(st_crs(prop))
-
-    #blk_vtd_match <- geo_match(from = blk, to = vtd, method = 'centroid')
-    #vtd_dist_match <- geo_match(from = vtd, to = prop, method = 'area')
-
-    vtd20 <- st_read(here(paths$vtd_20)) %>% st_transform(st_crs(prop))
+    vtd20 <- st_read(here(paths$vtd_20)) %>% st_transform(st_crs(co_shp))
     blk_vtd20_match <- geo_match(from = blk, to = vtd20, method = 'centroid')
-    vtd20_dist_match <- geo_match(from = vtd20, to = prop, method = 'area')
-
 
     # precincts
-
     # Voting and Election Science Team, 2018, "2016 Precinct-Level Election Results",
     # https://doi.org/10.7910/DVN/NH5S2I, Harvard Dataverse, V60
     prec16 <- st_read(here(paths$co_16)) %>%
-        st_transform(st_crs(prop)) %>%
+        st_transform(st_crs(co_shp)) %>%
         rename(
             dem_16_pres = G16PREDCLI, rep_16_pres = G16PRERTRU,
             dem_16_sen = G16USSDBEN, rep_16_sen = G16USSRGLE
-        )
-    # Voting and Election Science Team, 2019, "2018 Precinct-Level Election Results",
-    # https://doi.org/10.7910/DVN/UBKYRU, Harvard Dataverse, V39
-    prec18 <- st_read(here(paths$co_18)) %>%
-        st_transform(st_crs(prop)) %>%
-        rename(
-            dem_18_gov = G18GOVDPOL, rep_18_gov = G18GOVRSTA,
-            dem_18_atg = G18ATGDWEI, rep_18_atg = G18ATGRBRA,
-            dem_18_sos = G18SOSDGRI, rep_18_sos = G18SOSRWIL
-        )
-
-    prec16 <- prec16 %>%
+        )  %>%
         rowwise() %>%
         mutate(
             dem_16 = mean(c_across(cols = starts_with('dem_16'))),
@@ -75,7 +54,15 @@ prepare = function(paths) {
         ) %>%
         ungroup()
 
-    prec18 <- prec18 %>%
+    # Voting and Election Science Team, 2019, "2018 Precinct-Level Election Results",
+    # https://doi.org/10.7910/DVN/UBKYRU, Harvard Dataverse, V39
+    prec18 <- st_read(here(paths$co_18)) %>%
+        st_transform(st_crs(co_shp)) %>%
+        rename(
+            dem_18_gov = G18GOVDPOL, rep_18_gov = G18GOVRSTA,
+            dem_18_atg = G18ATGDWEI, rep_18_atg = G18ATGRBRA,
+            dem_18_sos = G18SOSDGRI, rep_18_sos = G18SOSRWIL
+        ) %>%
         rowwise() %>%
         mutate(
             dem_18 = mean(c_across(cols = starts_with('dem_18'))),
@@ -121,13 +108,20 @@ prepare = function(paths) {
 
     co_final_shp <- vtd20 %>%
         mutate(vtd20 = row_number()) %>%
-        left_join(blk_at_vtd, by = 'vtd20') %>%
-          mutate(cd = prop$DISTRICT[vtd20_dist_match])
+        left_join(blk_at_vtd, by = 'vtd20')
+    }
 
-    co_map = redist_map(co_final_shp, existing_plan=cd,
-                        pop_tol=0.001, total_pop=e_pop)
+    if (!'cd' %in% names(co_final_shp)) {
+      prop <- st_read(here(paths$shp))
+      vtd20_dist_match <- geo_match(from = co_final_shp, to = prop, method = 'area')
+      co_final_shp <- co_final_shp %>% mutate(cd = prop$DISTRICT[vtd20_dist_match])
+    }
 
-    write_rds(co_map, here(shp_path), compress="xz")
+    if (!'adj' %in% names(co_final_shp)) {
+      co_final_shp <- co_final_shp %>% mutate(adj = redist.adjacency(.))
+    }
+
+    write_rds(co_final_shp, here(shp_path), compress="xz")
 
     # return path to processed file
     shp_path
