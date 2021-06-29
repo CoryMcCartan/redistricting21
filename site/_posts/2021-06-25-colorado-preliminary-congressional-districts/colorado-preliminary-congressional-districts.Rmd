@@ -130,36 +130,41 @@ of Democratic voters in the most competitive district. This feature of
 the plan helps Democrats versus the counterfactual, which would lead to
 more reliable 4-4 splits.
 
-We also look at what's called a seats-votes curve. This tries to capture
-the difficult-to-measure relationship between the number of seats, which
-is only 8, and the number of votes, which is orders-of-magnitude larger.
-In general, the seats-votes curve sits in the middle of the sampled
-plans. That is indicative of a map that was drawn without strongly
+We also look at what's called a seats-votes curve, which shows the
+relationship between the share of votes that a party earns and the number of 
+seats that it wins as a result. Ideally, these two numbers would track each other
+closely, but gerrymandering distorts this relationship to favor one party. 
+Here, the seats-votes curve for the proposed plan sits looks to be about average
+for the seats-votes curves of the comparison plans. 
+That is indicative of a map that was drawn without strongly
 considering one party over the other.
 
 <aside>
-
-This idea speaks to the idea of a [partisan bias in this
-relationship](https://gking.harvard.edu/files/LP9.pdf). The simulations
-of other possible maps helps us understand the geographic relationship
-that this measure doesn't use.
-
+All seats-votes curves are somewhat approximate, as they must relate between 
+the number of seats, which here is only 8, and the number of votes, which is
+orders of magnitude larger.  This inevitably leads to discreteness, which here
+is somewhat suppressed through the use of linear interpolation.
 </aside>
 
 ```{r seats-votes, layout="l-body-outset", fig.width=8, fig.height=4, fig.cap="Democratic seats versus votes across two elections. Actual map shown in blue."}
 plot_sv(map, plans)
 ```
 
-As for the Mean-Median measure, which is intended to measure partisan
-bias, we find that it is slightly to the *left* of the median plan. It's
-near the middle, but a bit to the left. Without a focus on
-competitiveness, it appears the commission settled into a competitive
-plan, relative to the set of plans that approximate the state's
-requirements.
+Another common way to measure the partisan bias of a plan is the "mean-median
+difference," which compares the mean and median districts according to their
+Democratic vote shares. As the figure below shows, the proposed plan slightly
+favors Republicans according to this measure, but less than would actually
+be expected according to the neutral comparison plans.  This discrepancy reflects
+structural bias against Democrats, who tend to cluster in cities where their
+votes are disproportionately wasted.
 
 ```{r mean-med, layout="l-body-outset", fig.width=8, fig.height=4, fig.cap="Mean-median bias for the proposed plan and 3,000 alternative plans."}
 plot_mm(plans)
 ```
+
+All three partisan bias measures point to the same conclusion: the Commission's
+proposed congressional district map is in line with other fair and neutral
+plans that could have been drawn, and, if anything, slightly favors Democrats.
 
 ------------------------------------------------------------------------
 

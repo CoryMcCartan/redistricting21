@@ -2,6 +2,13 @@
 # © June 2021
 
 # Set up the redistricting problem, including filtering, cores, and population tolerance
+make_map = function(shp_path) {
+    co_shp = read_rds(here(shp_path))
+    co_map = redist_map(co_shp, pop_tol=0.01, total_pop=e_pop,
+                        existing_plan=cd, adj=co_shp$adj)
+    co_map
+}
+
 # Simulate redistricting plans
 simulate = function(co_map) {
     plans = redist_smc(co_map, nsims=3e3, counties=COUNTYFP20)

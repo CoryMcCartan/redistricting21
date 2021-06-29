@@ -119,7 +119,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   <!--radix_placeholder_rmarkdown_metadata-->
 
 <script type="text/json" id="radix-rmarkdown-metadata">
-{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","description","author","date","output","bibliography"]}},"value":[{"type":"character","attributes":{},"value":["The Colorado Preliminary Congressional Map is Fair"]},{"type":"character","attributes":{},"value":["Colorado's Congressional Independent Redistricting Commission has released a \npreliminary map for the 2022-2030 congressional districts."]},{"type":"list","attributes":{},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name","affiliation","url"]}},"value":[{"type":"character","attributes":{},"value":["Christopher T. Kenny"]},{"type":"character","attributes":{},"value":["Department of Government, Harvard University"]},{"type":"character","attributes":{},"value":["https://www.christophertkenny.com/"]}]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name","affiliation","url"]}},"value":[{"type":"character","attributes":{},"value":["Cory McCartan"]},{"type":"character","attributes":{},"value":["Department of Statistics, Harvard University"]},{"type":"character","attributes":{},"value":["https://corymccartan.github.io/"]}]}]},{"type":"character","attributes":{},"value":["06-26-2021"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["distill::distill_article"]}},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["self_contained"]}},"value":[{"type":"logical","attributes":{},"value":[false]}]}]},{"type":"character","attributes":{},"value":["biblio.bib"]}]}
+{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","description","author","date","output","bibliography","editor_options"]}},"value":[{"type":"character","attributes":{},"value":["The Colorado Preliminary Congressional Map is Fair"]},{"type":"character","attributes":{},"value":["Colorado's Congressional Independent Redistricting Commission has released a \npreliminary map for the 2022-2030 congressional districts."]},{"type":"list","attributes":{},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name","affiliation","url"]}},"value":[{"type":"character","attributes":{},"value":["Christopher T. Kenny"]},{"type":"character","attributes":{},"value":["Department of Government, Harvard University"]},{"type":"character","attributes":{},"value":["https://www.christophertkenny.com/"]}]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name","affiliation","url"]}},"value":[{"type":"character","attributes":{},"value":["Cory McCartan"]},{"type":"character","attributes":{},"value":["Department of Statistics, Harvard University"]},{"type":"character","attributes":{},"value":["https://corymccartan.github.io/"]}]}]},{"type":"character","attributes":{},"value":["06-26-2021"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["distill::distill_article"]}},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["self_contained"]}},"value":[{"type":"logical","attributes":{},"value":[false]}]}]},{"type":"character","attributes":{},"value":["biblio.bib"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["markdown"]}},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["wrap"]}},"value":[{"type":"integer","attributes":{},"value":[72]}]}]}]}
 </script>
 <!--/radix_placeholder_rmarkdown_metadata-->
   
@@ -2451,8 +2451,9 @@ Figure 2: Partisan (2016 election) and demographic patterns in Colorado, with pr
 </p>
 </div>
 </div>
-<p>But what constitutes a “fair” map in Colorado depends a lot how different types of voters are distributed, where cities are, and more. What appears at first to be a slightly GOP-friendly plan could in fact be a plan that is good for Democrats, relative to what might otherwise be expected. In other words, to talk about the Colorado plan, it’s important to consider what the alternatives might be.</p>
+<p>But what constitutes a “fair” map in Colorado depends a lot on how different types of voters are distributed, where cities are, and more. What appears at first to be a slightly GOP-friendly plan could in fact be a plan that is good for Democrats, relative to what might otherwise be expected. In other words, to talk about the Colorado plan, it’s important to consider what the alternatives might be.</p>
 <p>We’ll evaluate the Colorado plan by comparing it to 3,000 hypothetical other plans, which were drawn by a computer algorithm following the same rules that the independent commission has to follow.</p>
+<p>The short evaluation is that, as the title suggests, the plan is generally fair, compared to sampled plans that meet similar criteria.</p>
 <h1 id="generating-plans">Generating Plans</h1>
 <p>Generating 3,000 hypothetical plans is not straightforward—there are vastly more ways to draw redistricting plans than there are atoms in the universe, and yet only a minuscule fraction of these plans satisfy all the relevant legal constraints. Here, we’ll use a new algorithm <span class="citation" data-cites="mcca:imai:20">(<a href="#ref-mcca:imai:20" role="doc-biblioref">McCartan and Imai 2020</a>)</span>, which randomly generates plans according to a specific statistical distribution. Reflecting <a href="https://redistricting.colorado.gov/content/congressional-redistricting">Colorado’s redistricting criteria</a>, we ensure the generated plans:</p>
 <ul>
@@ -2462,7 +2463,7 @@ Figure 2: Partisan (2016 election) and demographic patterns in Colorado, with pr
 <li>Don’t use any information on incumbents.</li>
 </ul>
 <aside>
-In line with the commission’s findings, we do not require the creation of a majority-minority district for compliance with the federal Voting Rights Act.
+<p>In line with the commission’s findings, we do not require the creation of a majority-minority district for compliance with the federal Voting Rights Act.</p>
 </aside>
 <p>Here are a few of the sampled plans:</p>
 <div class="layout-chunk" data-layout="l-page">
@@ -2479,6 +2480,10 @@ Figure 3: Democratic vote by district for the proposed plan and 3,000 alternativ
 </div>
 </div>
 <p>What we see overall is a proposed set of districts that is very much in line with what would be expected under a fair and neutral procedure. The only consistent difference is a lower number of Democratic voters in two Republican-leaning districts, which is offset by slightly higher number of Democratic voters in the most competitive district. This feature of the plan helps Democrats versus the counterfactual, which would lead to more reliable 4-4 splits.</p>
+<p>We also look at what’s called a seats-votes curve, which shows the relationship between the share of votes that a party earns and the number of seats that it wins as a result. Ideally, these two numbers would track each other closely, but gerrymandering distorts this relationship to favor one party. Here, the seats-votes curve for the proposed plan sits looks to be about average for the seats-votes curves of the comparison plans. That is indicative of a map that was drawn without strongly considering one party over the other.</p>
+<aside>
+All seats-votes curves are somewhat approximate, as they must relate between the number of seats, which here is only 8, and the number of votes, which is orders of magnitude larger. This inevitably leads to discreteness, which here is somewhat suppressed through the use of linear interpolation.
+</aside>
 <div class="layout-chunk" data-layout="l-body-outset">
 <div class="figure"><span id="fig:seats-votes"></span>
 <img src="colorado-preliminary-congressional-districts_files/figure-html5/seats-votes-1.png" alt="Democratic seats versus votes across two elections. Actual map shown in blue." width="768" />
@@ -2487,6 +2492,7 @@ Figure 4: Democratic seats versus votes across two elections. Actual map shown i
 </p>
 </div>
 </div>
+<p>Another common way to measure the partisan bias of a plan is the “mean-median difference,” which compares the mean and median districts according to their Democratic vote shares. As the figure below shows, the proposed plan slightly favors Republicans according to this measure, but less than would actually be expected according to the neutral comparison plans. This discrepancy reflects structural bias against Democrats, who tend to cluster in cities where their votes are disproportionately wasted.</p>
 <div class="layout-chunk" data-layout="l-body-outset">
 <div class="figure"><span id="fig:mean-med"></span>
 <img src="colorado-preliminary-congressional-districts_files/figure-html5/mean-med-1.png" alt="Mean-median bias for the proposed plan and 3,000 alternative plans." width="768" />
@@ -2495,6 +2501,7 @@ Figure 5: Mean-median bias for the proposed plan and 3,000 alternative plans.
 </p>
 </div>
 </div>
+<p>All three partisan bias measures point to the same conclusion: the Commission’s proposed congressional district map is in line with other fair and neutral plans that could have been drawn, and, if anything, slightly favors Democrats.</p>
 <hr />
 <h1 id="data">Data</h1>
 <p>Since the Commission provides population estimates at the 2010 block level, we start by building a block dataset using <code>geomander</code> <span class="citation" data-cites="geomander">(<a href="#ref-geomander" role="doc-biblioref">Kenny 2021</a>)</span>. This has the shapes for each block along with the population and voting age populations by block.</p>

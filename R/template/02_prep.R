@@ -12,10 +12,9 @@ prepare = function(paths) {
 
     ``state``_final_shp = ...
 
-    ``state``_map = redist_map(``state``_final_shp, existing_plan=cd,
-                               pop_tol=0.01)
+    ``state``_final_shp$adj = redist.adjacency(``state``_final_shp$adj)
 
-    write_rds(``state``_map, here(shp_path), compress="xz")
+    write_rds(``state``_final_shp, here(shp_path), compress="xz")
 
     # return path to processed file
     shp_path

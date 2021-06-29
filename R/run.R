@@ -33,7 +33,7 @@ run_analysis = function(state, type="cd", stage="final", run_all=FALSE) {
     }
 
     sim_path = here("data", state, str_glue("{slug}_results.rds"))
-    map = read_rds(here(shp_path))
+    map = get("make_map", run_env)(shp_path)
     if (file.exists(sim_path) && !run_all) {
         sims = read_rds(sim_path)
     } else {

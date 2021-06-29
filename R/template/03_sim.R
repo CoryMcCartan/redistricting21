@@ -2,6 +2,14 @@
 # ``COPYRIGHT``
 
 # Set up the redistricting problem, including filtering, cores, and population tolerance
+make_map = function(shp_path) {
+    ``state``_shp = read_rds(here(shp_path))
+    ``state``_map = redist_map(``state``_shp, pop_tol=0.01,
+                               existing_plan=cd, adj=``state``_shp$adj)
+
+    ``state``_map
+}
+
 # Simulate redistricting plans
 # Analyze and summarize simulated plans
 # Returns a simulation-free summary frame with all the necessary data for visualization
