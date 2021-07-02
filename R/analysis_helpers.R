@@ -8,7 +8,7 @@ GOP_DEM = c("#A0442C", "#B25D4C", "#C27568", "#D18E84", "#DFA8A0", "#EBC2BC",
             "#638BC6", "#3D77BB", "#0063B1")
 
 
-dem_distr_plot = function(pl, ...) {
+plot_dem_distr = function(pl, ...) {
     dem_cols = names(pl)
     dem_cols = dem_cols[str_starts(dem_cols, "dem_")]
     p = purrr::map(dem_cols, function(col) {
@@ -23,7 +23,7 @@ dem_distr_plot = function(pl, ...) {
             theme_r21() +
             guides(color=F, lty=F)
     })
-    wrap_plots(p, nrow=2) + plot_layout(guides="collect")
+    wrap_plots(p, ...) + plot_layout(guides="collect")
 }
 
 plot_cds = function(map, pl, county, abbr, city=FALSE) {

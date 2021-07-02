@@ -119,7 +119,7 @@ district has fewer Democratic voters than would be expected under an
 average fair and neutral map.
 
 ```{r dem-distrs, layout="l-body-outset", fig.width=8, fig.height=8.5, fig.cap="Democratic vote by district for the proposed plan and 3,000 alternative plans."}
-dem_distr_plot(plans)
+plot_dem_distr(plans, ncol=1)
 ```
 
 What we see overall is a proposed set of districts that is very much in
