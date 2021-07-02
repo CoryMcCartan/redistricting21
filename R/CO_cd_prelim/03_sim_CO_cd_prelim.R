@@ -22,12 +22,11 @@ simulate = function(co_map) {
                dem_18 = group_frac(map, dem_18, dem_18 + rep_18),
                black = group_frac(map, e_vap_black, e_vap),
                hisp = group_frac(map, e_vap_hisp, e_vap),
-               minority = group_frac(map, e_vap - e_vap_white, e_vap)) %>%
+               minority = group_frac(map, e_vap - e_vap_white, e_vap))
 
     path = "data/CO/CO_cd_prelim_results.rds"
     write_rds(pl, here(path), compress="xz")
 
-    # return path to simulation summary files
-    path
+    pl
 }
 

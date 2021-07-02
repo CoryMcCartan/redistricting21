@@ -13,8 +13,8 @@ make_map = function(shp_path) {
 # Simulate redistricting plans
 # Analyze and summarize simulated plans
 # Returns a simulation-free summary frame with all the necessary data for visualization
-simulate = function(``state``_map) {
-    plans1 = redist_smc(set_pop_tol(``state``_map, 0.01),
+simulate = function(map) {
+    plans1 = redist_smc(set_pop_tol(map, 0.01),
                         nsims=10e3, counties=county)
 
     plans = list(
@@ -38,7 +38,6 @@ simulate = function(``state``_map) {
     path = "data/``STATE``/``SLUG``_results.rds"
     write_rds(pl, here(path), compress="xz")
 
-    # return path to simulation summary files
-    path
+    pl
 }
 
