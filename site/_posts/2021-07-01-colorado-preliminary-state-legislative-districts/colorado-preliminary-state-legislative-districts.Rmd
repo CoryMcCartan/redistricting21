@@ -8,7 +8,7 @@ author:
     url: https://www.christophertkenny.com/
   - name: Cory McCartan
     url: https://corymccartan.github.io/
-date: 07-01-2021
+date: 07-02-2021
 output:
   distill::distill_article:
     self_contained: false
@@ -19,8 +19,9 @@ output:
 knitr::opts_chunk$set(echo = FALSE)
 ```
 
-Distill is a publication format for scientific and technical writing, native to the web.
-
-Learn more about using Distill at <https://rstudio.github.io/distill>.
 
 
+
+# Data
+
+As with our [post on the CO preliminary Congressional Districts](https://corymccartan.github.io/redistricting21/posts/2021-06-25-colorado-preliminary-congressional-districts/), we build our election data from the spatial electoral data that the Voting and Election Science Team creates. For the 2016 data, we average the presidential and senate races [@vest:16]. For the 2018 data, we average the Governor, Attorney General, and Secretary of State Elections [@vest:18]. And for the 2020 data, we average the presidential and senate races [@vest:20]. This provides a diverse set of races to use as baselines over time for evaluating the proposed plans.
