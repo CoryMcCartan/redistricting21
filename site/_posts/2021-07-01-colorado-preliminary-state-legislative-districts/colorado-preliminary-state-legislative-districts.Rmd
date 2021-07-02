@@ -1,0 +1,26 @@
+---
+title: "Colorado Preliminary State Legislative Districts"
+description: |
+    Colorado's Independent Redistricting Commission has released a 
+  preliminary map for the 2022-2030 state legislative districts districts.
+author:
+  - name: Christopher T. Kenny
+    url: https://www.christophertkenny.com/
+  - name: Cory McCartan
+    url: https://corymccartan.github.io/
+date: 07-01-2021
+output:
+  distill::distill_article:
+    self_contained: false
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+Distill is a publication format for scientific and technical writing, native to the web.
+
+Learn more about using Distill at <https://rstudio.github.io/distill>.
+
+
