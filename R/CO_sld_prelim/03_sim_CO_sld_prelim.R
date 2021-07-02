@@ -38,6 +38,7 @@ simulate = function(co_map) {
                    county_splits = county_splits(co_map[[nm]], COUNTYFP20),
                    dem_16 = group_frac(co_map[[nm]], dem_16, dem_16 + rep_16),
                    dem_18 = group_frac(co_map[[nm]], dem_18, dem_18 + rep_18),
+                   dem_20 = group_frac(co_map[[nm]], dem_20, dem_20 + rep_20),
                    black = group_frac(co_map[[nm]], e_vap_black, e_vap),
                    hisp = group_frac(co_map[[nm]], e_vap_hisp, e_vap),
                    minority = group_frac(co_map[[nm]], e_vap - e_vap_white, e_vap))

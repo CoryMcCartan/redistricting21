@@ -91,12 +91,14 @@ plot_minority = function(map, white) {
 }
 
 eff_gap_calc = function(pl, shifts=seq(-0.1, 0.1, by=0.01)) {
+    if (!"sim" %in% names(pl)) pl$sim = NA_character_
+    if (!"chain" %in% names(pl)) pl$chain = NA_integer_
     d_egap = pl %>%
-        select(sim, draw, district, starts_with("dem_")) %>%
+        select(sim, chain, draw, district, starts_with("dem_")) %>%
         pivot_longer(starts_with("dem_"), names_to="year", names_prefix="dem_",
                      values_to="dem") %>%
         mutate(year = 2000L + as.integer(year)) %>%
-        group_by(sim, year, draw)
+        group_by(sim, chain, year, draw)
 
     calc_egap = function(s) {
         summarize(d_egap, shift = s,
@@ -122,13 +124,15 @@ plot_sv = function(map, pl) {
                statewide = dem/(dem+rep)) %>%
         select(-rep, -dem)
 
+    if (!"sim" %in% names(pl)) pl$sim = NA_character_
+    if (!"chain" %in% names(pl)) pl$chain = NA_integer_
     d_sv = pl %>%
-        select(sim, draw, district, starts_with("dem_")) %>%
+        select(sim, chain, draw, district, starts_with("dem_")) %>%
         pivot_longer(starts_with("dem_"), names_to="year", names_prefix="dem_",
                      values_to="dem") %>%
         mutate(year = 2000L + as.integer(year)) %>%
         left_join(statewide, by="year") %>%
-        group_by(sim, year, draw) %>%
+        group_by(sim, chain, year, draw) %>%
         arrange(desc(dem), .by_group=TRUE) %>%
         mutate(shift = 0.5 - dem,
                pct_seats = row_number()/n(),
@@ -154,12 +158,14 @@ plot_sv = function(map, pl) {
 plot_mm = function(pl) {
     refs = unique(subset_ref(pl)$draw)
 
+    if (!"sim" %in% names(pl)) pl$sim = NA_character_
+    if (!"chain" %in% names(pl)) pl$chain = NA_integer_
     d_mm = pl %>%
-        select(sim, draw, district, starts_with("dem_")) %>%
+        select(sim, chain, draw, district, starts_with("dem_")) %>%
         pivot_longer(starts_with("dem_"), names_to="year", names_prefix="dem_",
                      values_to="dem") %>%
         mutate(year = 2000L + as.integer(year)) %>%
-        group_by(sim, year, draw) %>%
+        group_by(sim, chain, year, draw) %>%
         summarize(meanmed = mean(dem) - median(dem))
 
     xmin = floor(min(d_mm$meanmed) * 400) / 400
