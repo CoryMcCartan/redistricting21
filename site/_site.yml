@@ -13,6 +13,7 @@ navbar:
     - icon: fab fa-github
       href: https://github.com/CoryMcCartan/redistricting21
 theme: theme.css
+google_analytics: "UA-79274202-4"
 output:
   distill::distill_article:
     self_contained: false

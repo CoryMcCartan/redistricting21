@@ -5,14 +5,14 @@
       "title": "About",
       "author": [],
       "contents": "\nThe 2021 redistricting cycle will be extremely consequential, setting legislative and congressional boundaries for a decade, just as computing power and new data allow map-drawers to create sophisticated partisan gerrymanders, and the Supreme Court has stepped back from policing them.\nWe put together this site to analyze redistricting plans as states release them, in context. In context means we will employ cutting-edge redistricting simulation methodologies to create large numbers of alternative plans. This helps make better judgement about the quality of a proposed or finalized plan, by making comparisons to other plans which also respect municipal, state, and federal requirements for redistricting.\nWe rely entirely on open source tools and data, so that anyone (with a bit of R familiarity) can replicate the analysis and make changes to it.\nWe will attempt to cover as many state plans as we are able. This map summarizes the state of our current analyses.\nOur analysesAbout the Authors\nCory McCartan is a PhD Candidate in Statistics at Harvard University. He is the author of the R packages blockpop, wacolors, and adjustr.\nChris Kenny is a PhD Candidate in Government at Harvard University. He studies redistricting and Census policy-making. He is the author of the R packages geomander and ppmf.\nThe authors are members of the Algorithm Assisted Redistricting Methodology (ALARM) Project, and are coauthors of the R packages redist (with Ben Fifield and Kosuke Imai) and PL94171.\n\n\n\n",
-      "last_modified": "2021-06-26T13:41:22-07:00"
+      "last_modified": "2021-07-07T16:37:13-04:00"
     },
     {
       "path": "index.html",
       "title": "Redistricting Analysis",
       "author": [],
       "contents": "\n\n\n\n",
-      "last_modified": "2021-06-26T13:41:24-07:00"
+      "last_modified": "2021-07-07T16:37:14-04:00"
     }
   ],
   "collections": ["posts/posts.json"]
