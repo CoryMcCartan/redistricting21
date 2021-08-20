@@ -36,7 +36,8 @@ next_seat <- function(dvs) {
 
 # Simulate redistricting plans
 simulate = function(al_map) {
-    plans = redist_shortburst(al_map, score_fn = scorer_inc_seats(al_map, dvote = vap - vap_white, vap_white))
+    plans = redist_shortburst(al_map, score_fn = scorer_inc_seats(al_map, dvote = vap - vap_white, vap_white),
+                              counties = county, max_bursts = 1e4, stop_at = 2)
 
     pl = plans %>%
         mutate(sim = "tol_001", .before="draw") %>%
