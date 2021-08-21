@@ -1,6 +1,6 @@
 # Simulate plans for `AL_vtd_20`
 # © August 2021
-
+shp_path = "data/AL/AL_vtd_20.rds"
 # Set up the redistricting problem, including filtering, cores, and population tolerance
 make_map = function(shp_path) {
     al_shp = read_rds(here(shp_path))
@@ -36,16 +36,16 @@ next_seat <- function(dvs) {
 
 # Simulate redistricting plans
 simulate = function(al_map) {
-    plans = redist_shortburst(al_map, score_fn = scorer_inc_seats(al_map, dvote = vap - vap_white, vap_white),
-                              counties = county, max_bursts = 1e4, stop_at = 2)
+    plans = redist_shortburst(al_map, score_fn = scorer_inc_seats(al_map, dvote = vap_black, vap - vap_black),
+                              counties = county, max_bursts = 1e5, stop_at = 2)
 
     pl = plans %>%
         mutate(sim = "tol_001", .before="draw") %>%
         mutate(dev =  plan_parity(al_map),
                comp = distr_compactness(al_map),
                county_splits = county_splits(al_map, county),
-               dem_16 = group_frac(al_map, adv_16, adv_16 + arv_16),
-               dem_18 = group_frac(al_map, adv_18, adv_18 + arv_18),
+               dvs_16 = group_frac(al_map, adv_16, adv_16 + arv_16),
+               dvs_18 = group_frac(al_map, adv_18, adv_18 + arv_18),
                black = group_frac(al_map, vap_black, vap),
                hisp = group_frac(al_map, vap_hisp, vap),
                minority = group_frac(al_map, vap - vap_white, vap))
