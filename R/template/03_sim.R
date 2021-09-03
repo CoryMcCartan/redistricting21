@@ -1,6 +1,8 @@
 # Simulate plans for ```SLUG```
 # ``COPYRIGHT``
 
+shp_path = "data/``STATE``/``SLUG``_vtd_20.rds"
+
 # Set up the redistricting problem, including filtering, cores, and population tolerance
 make_map = function(shp_path) {
     ``state``_shp = read_rds(here(shp_path))
