@@ -3,14 +3,24 @@ theme_r21 = function() theme_bw(base_size=10)
 PAL_COAST = c("#7BAEA0", "#386276", "#3A4332", "#7A7D6F", "#D9B96E", "#BED4F0")
 PAL_LARCH = c("#D2A554", "#626B5D", "#8C8F9E", "#858753", "#A4BADF", "#D3BEAF")
 PAL = PAL_COAST[c(5, 1, 2, 4, 3, 6)]
-GOP_DEM = c("#A0442C", "#B25D4C", "#C27568", "#D18E84", "#DFA8A0", "#EBC2BC",
-            "#F6DCD9", "#F9F9F9", "#DAE2F4", "#BDCCEA", "#9FB6DE", "#82A0D2",
-            "#638BC6", "#3D77BB", "#0063B1")
+GOP_DEM = c("#A0442C", "#B25D4C", "#C27568", "#D18E84", "#DFA8A0",
+            "#EBC2BC",  "#F6DCD9", "#F9F9F9", "#DAE2F4", "#BDCCEA",
+            "#9FB6DE", "#82A0D2", "#638BC6", "#3D77BB", "#0063B1")
+scale_fill_party_c = function(name="Democratic share", midpoint=0.5, limits=0:1,
+                              labels=scales::percent, oob=scales::squish, ...) {
+    scale_fill_gradient2(name=name, ..., low = GOP_DEM[1], high = GOP_DEM[15],
+                         midpoint=midpoint, limits=limits, labels=labels, oob=oob)
+}
+scale_color_party_d = function(...) {
+    scale_color_manual(..., values=c(GOP_DEM[2], GOP_DEM[14]),
+                       labels=c("Rep.", "Dem."))
+}
 
 
 plot_dem_distr = function(pl, ...) {
     dem_cols = names(pl)
     dem_cols = dem_cols[str_starts(dem_cols, "dem_")]
+    n_ref = sum(str_length(colnames(as.matrix(pl))) > 0)
     p = purrr::map(dem_cols, function(col) {
         redist.plot.distr_qtys(pl, !!rlang::sym(col), size=0.001, alpha=0.2, color_thresh=0.5) +
             scale_y_continuous("Democratic two-party share",
@@ -19,9 +29,9 @@ plot_dem_distr = function(pl, ...) {
             labs(title=str_c("20", str_sub(col, 5)),
                  x="Districts, ordered by Democratic share") +
             #scale_color_manual(values=PAL[1]) +
-            scale_color_manual(values=GOP_DEM[c(1, 15)]) +
+            scale_color_manual(values=GOP_DEM[c(1, 15)], guide="none") +
             theme_r21() +
-            guides(color=F, lty=F)
+            guides(lty=if (n_ref > 1) "legend" else "none")
     })
     wrap_plots(p, ...) + plot_layout(guides="collect")
 }
@@ -57,9 +67,8 @@ plot_cds = function(map, pl, county, abbr, city=FALSE) {
         {if (city) geom_text_repel(aes(label=str_to_upper(NAME), geometry=geometry),
                         data=cities, color="#ffffff88", fontface="bold",
                         size=3.5, inherit.aes=FALSE, stat="sf_coordinates")} +
-        scale_fill_manual(values=PAL) +
-        theme_void() +
-        guides(fill=F)
+        scale_fill_manual(values=PAL, guide="none") +
+        theme_void()
 }
 
 plot_partisan = function(map, dem, rep, plan=get_existing(.)) {
@@ -88,6 +97,27 @@ plot_minority = function(map, white) {
         scale_fill_wa_c("sound_sunset", name="Pct. white", labels=scales::percent) +
         theme(legend.key.height=unit(0.4, "cm"),
               legend.key.width=unit(1.25, "cm"))
+}
+
+#' Democratic share of district
+#'
+#' Returns a matrix of precincts by plans, where each entry is the Democratic
+#' share in the district the precinct belongs to in that plan.
+#'
+#' @param plans a `redist_plans` object.
+#' @param group column of `plans` containing the group share of each district.
+#'
+#' @returns a matrix
+district_group = function(plans, group) {
+    m = as.matrix(plans)
+    m_grp = arrange(plans, as.integer(draw), district) %>%
+        pull({{ group }}) %>%
+        matrix(nrow=max(plans$district))
+    m_prec = matrix(nrow=nrow(m), ncol=ncol(m))
+    for (i in seq_len(ncol(m))) {
+        m_prec[, i] = m_grp[, i][m[, i]]
+    }
+    m_prec
 }
 
 eff_gap_calc = function(pl, shifts=seq(-0.1, 0.1, by=0.01)) {

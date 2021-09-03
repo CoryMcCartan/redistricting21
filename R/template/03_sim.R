@@ -27,11 +27,10 @@ simulate = function(map) {
             mutate(dev =  plan_parity(map),
                    comp = distr_compactness(map),
                    county_splits = county_splits(map, county),
-                   dem_16 = group_frac(map, dem_16, dem_16 + gop_16),
-                   dem_20 = group_frac(map, dem_20, dem_20 + gop_20),
-                   black = group_frac(map, black),
-                   hisp = group_frac(map, hisp),
-                   minority = group_frac(map, pop - white))
+                   dem = group_frac(map, ndv, ndv+nrv),
+                   black = group_frac(map, pop_black),
+                   hisp = group_frac(map, pop_hisp),
+                   minority = group_frac(map, pop - pop_white))
     })
 
     pl = bind_rows(plans, .id="sim")
