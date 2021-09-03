@@ -25,7 +25,8 @@ Imports:
     patchwork,
     ggrepel,
     wacolors,
-    cli
+    cli,
+    PL94171
 Suggests:
     devtools,
     rstudioapi
