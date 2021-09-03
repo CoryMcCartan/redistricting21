@@ -62,9 +62,9 @@ plot_cds = function(map, pl, county, abbr, city=FALSE) {
         guides(fill=F)
 }
 
-plot_partisan = function(map, dem, rep) {
+plot_partisan = function(map, dem, rep, plan=get_existing(.)) {
     distrs = map %>%
-        mutate(.distr = get_existing(.)) %>%
+        mutate(.distr = plan) %>%
         as_tibble() %>%
         st_as_sf() %>%
         group_by(.distr) %>%

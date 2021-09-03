@@ -5,14 +5,8 @@
 
 # compile raw data into a final shapefile for analysis
 download = function() {
-    shp_url = ""
-    shp_path = "data-raw/``STATE``/" # don't use here()
-    download(shp_url, here(shp_path))
-
-    baf_url = ""
-    baf_path = "data-raw/``STATE``/"
-    download(baf_url, here(baf_path))
+    path = download_redistricting_file("``STATE``", "data-raw/``STATE``/")
 
     # return list of paths to downloaded file
-    list(shp=shp_path, baf=baf_path)
+    list(data=path)
 }
