@@ -94,8 +94,8 @@ h1.posts-list-caption {
     display: flex;
 }
 .grade {
-    margin: 4px;
-    padding: 0.8em;
+    margin: 3px;
+    padding: 0.5em 0.7em;
     border-radius: 6px;
     flex-basis: 12em;
 }
@@ -117,4 +117,8 @@ h1.posts-list-caption {
 
 aside h4 {
     margin-bottom: 0;
+}
+
+aside p > img {
+    max-width: 140% !important;
 }
