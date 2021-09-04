@@ -2,7 +2,7 @@
   {
     "path": "posts/2021-09-03-oregon-congressional-districts/",
     "title": "Oregon: Two Plans, Two Gerrymanders?",
-    "description": "The Oregon State **Legislature** House Interim Committee On Redistricting released two draft plans for consideration for their 6 Congressionial Districts for 2022-2030.",
+    "description": "The Oregon State Legislature House Interim Committee On Redistricting released two draft plans for consideration for their 6 Congressionial Districts for 2022-2030.",
     "author": [
       {
         "name": "Cory McCartan",
@@ -15,9 +15,9 @@
     ],
     "date": "2021-09-03",
     "categories": [],
-    "contents": "\nOn September 3, 2021, the House Interim Committee on Redistricting released two opposing plans as potential starting points for drawing Congressional Districts. Oregon gained one seat following the 2020 Census, raising its total seats to 6 for this decade. In Oregon, plans are proposed by the state legislature and signed by the governor as regular legislation. Currently, both the state legislature and governor’s office are controlled by Democrats.\n\n\n\nR.A. Plan Scores\n\n\n\nPlan A\n\n\n\n\nProportionality\n\n\nF\n\n\n–0.21\n\n\n\n\nRepresentativeness\n\n\nB\n\n\n0.58\n\n\n\n\nPlan B\n\n\n\n\nProportionality\n\n\nA\n\n\n0.01\n\n\n\n\nRepresentativeness\n\n\nD\n\n\n0.58\n\n\n\n\n\n\n\nFigure 1: The preliminary congressional districting plan.\n\n\n\n\n\n\n\n\n\n",
+    "contents": "\nOn September 3, 2021, the House Interim Committee on Redistricting released two opposing plans as potential starting points for drawing Congressional Districts. Oregon gained one seat following the 2020 Census, raising its total seats to 6 for this decade. In Oregon, plans are proposed by the state legislature and signed by the governor as regular legislation. Currently, both the state legislature and governor’s office are controlled by Democrats.\n\n\n\nR.A. Plan Scores\n\n\n\nPlan A\n\n\n\n\nProportionality\n\n\nF\n\n\n–0.21\n\n\n\n\nRepresentativeness\n\n\nB\n\n\n58.5%\n\n\n\n\nPlan B\n\n\n\n\nProportionality\n\n\nA\n\n\n0.01\n\n\n\n\nRepresentativeness\n\n\nD\n\n\n58.2%\n\n\n\n\n\n\n\nFigure 1: The preliminary congressional districting plan.\n\n\n\n\n\n\n",
     "preview": "posts/2021-09-03-oregon-congressional-districts/oregon-preliminary-state-legislative-districts_files/figure-html5/cd-map-1.png",
-    "last_modified": "2021-09-03T23:32:43-04:00",
+    "last_modified": "2021-09-03T23:53:55-04:00",
     "input_file": "oregon-preliminary-state-legislative-districts.knit.md"
   },
   {
