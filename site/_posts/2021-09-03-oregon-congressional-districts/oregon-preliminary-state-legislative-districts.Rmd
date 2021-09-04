@@ -25,6 +25,7 @@ devtools::load_all(here("."))
 analysis = run_analysis("OR", "cd", "prelim")
 map = analysis$map
 plans = analysis$results
+library(patchwork)
 ```
 
 On September 3, 2021, the House Interim Committee on Redistricting [released two opposing plans](https://www.oregonlegislature.gov/redistricting) as potential starting points for drawing Congressional Districts. Oregon gained one seat following the 2020 Census, raising its total seats to 6 for this decade. In Oregon, plans are proposed by the state legislature and signed by the governor as regular legislation. Currently, both the state legislature and governor's office are controlled by Democrats.
@@ -35,8 +36,27 @@ output_grades(make_grade(plans$tol_01))
 ```
 </aside>
 
-```{r cd-map, fig.cap="The preliminary congressional districting plan.", fig.height=4}
-p1 = plot_cds(map, map$cd_a, county, "OR") + labs(title="Plan A (Democratic)")
-p2 = plot_cds(map, map$cd_b, county, "OR") + labs(title="Plan B (Republican)")
-p1 + p2
+```{r cd-map, fig.cap="The preliminary congressional districting plan.", fig.height=5}
+counties <- map %>%
+  as_tibble() %>%
+  st_as_sf() %>%
+  group_by(county) %>%
+  summarize(geometry = st_union(geometry))
+
+{map %>%
+    group_by(cd_a) %>%
+    summarize(geometry = st_union(geometry)) %>%
+    ggplot() +
+    geom_sf(aes(fill = as.factor(cd_a), color = NULL)) +
+    geom_sf(data = counties, color = 'white', fill = '#ffffff1D', lwd = 1) +
+    theme_void() +
+    guides(fill = 'none')} +
+{map %>%
+    group_by(cd_b) %>%
+    summarize(geometry = st_union(geometry)) %>%
+    ggplot() +
+    geom_sf(aes(fill = as.factor(cd_b), color = NULL)) +
+    geom_sf(data = counties, color = 'white', fill = '#ffffff1D', lwd = 1) +
+    theme_void() +
+    guides(fill = 'none')}
 ```
