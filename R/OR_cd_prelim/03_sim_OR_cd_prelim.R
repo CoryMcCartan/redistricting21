@@ -12,14 +12,20 @@ make_map = function(shp_path) {
     or_map
 }
 
+
+
 # Simulate redistricting plans
 # Analyze and summarize simulated plans
 # Returns a simulation-free summary frame with all the necessary data for visualization
 simulate = function(map) {
     plans1 = redist_smc(map, nsims=10e3, counties=county)
+    plans2 <- redist_shortburst(map, scorer_status_quo(map, map$cd_b),
+                                init_plan = map$cd_a,
+                                max_bursts = 2e4, stop_at = 1)
 
     plans = list(
-        tol_01 = plans1
+        tol_01 = plans1,
+        sb = plans2
     )
 
     plans = purrr::map(plans, function(p) {
