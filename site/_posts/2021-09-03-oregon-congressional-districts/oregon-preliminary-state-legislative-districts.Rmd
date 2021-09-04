@@ -17,14 +17,14 @@ output:
 
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo=FALSE, message=FALSE, warning=FALSE, dev="ragg_png")
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE, dev = 'ragg_png')
 
 library(here)
-devtools::load_all(here("."))
+devtools::load_all(here('.'))
 
-analysis = run_analysis("OR", "cd", "prelim")
-map = analysis$map
-plans = analysis$results
+analysis <- run_analysis('OR', 'cd', 'prelim')
+map <- analysis$map
+plans <- analysis$results
 library(patchwork)
 ```
 
@@ -42,26 +42,29 @@ counties <- map %>%
   st_as_sf() %>%
   group_by(county) %>%
   summarize(geometry = st_union(geometry))
-places <- suppressMessages(tigris::places('OR', cb=TRUE))
+places <- suppressMessages(tigris::places('OR', cb = TRUE))
 
-{map %>%
+{
+  map %>%
     group_by(cd_a) %>%
     summarize(geometry = st_union(geometry)) %>%
     ggplot() +
     geom_sf(aes(fill = as.factor(cd_a), color = NULL)) +
     geom_sf(data = counties, color = 'white', fill = '#ffffff1D') +
-    geom_sf(data=places,fill = "#0000002A", color = NA) +
+    geom_sf(data = places, fill = '#0000002A', color = NA) +
     theme_void() +
     guides(fill = 'none') +
-    wacolors::scale_fill_wa_d()} +
-{map %>%
+    wacolors::scale_fill_wa_d()
+} + {
+  map %>%
     group_by(cd_b) %>%
     summarize(geometry = st_union(geometry)) %>%
     ggplot() +
     geom_sf(aes(fill = as.factor(cd_b), color = NULL)) +
     geom_sf(data = counties, color = 'white', fill = '#ffffff1D') +
-    geom_sf(data=places, fill = "#0000002A", color = NA) +
+    geom_sf(data = places, fill = '#0000002A', color = NA) +
     theme_void() +
-    guides(fill = 'none')+
-    wacolors::scale_fill_wa_d()}
+    guides(fill = 'none') +
+    wacolors::scale_fill_wa_d()
+}
 ```
