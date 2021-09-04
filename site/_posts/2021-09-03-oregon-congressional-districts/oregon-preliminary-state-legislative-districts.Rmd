@@ -1,8 +1,7 @@
 ---
-title: "Oregon: Two Plans, Two Gerrymanders"
+title: "Oregon: Two Plans, Two Gerrymanders?"
 description: |
-    Colorado's Independent Redistricting Commission has released a 
-  preliminary map for the 2022-2030 state legislative districts districts.
+    The Oregon State Legislature House Interim Committee On Redistricting released two draft plans for consideration for their 6 Congressionial Districts for 2022-2030.
 author:
   - name: Cory McCartan
     affiliation: Department of Statistics, Harvard University
@@ -27,6 +26,8 @@ analysis = run_analysis("OR", "cd", "prelim")
 map = analysis$map
 plans = analysis$results
 ```
+
+On September 3, 2021, the House Interim Committee on Redistricting released two opposing plans as potential starting points for drawing Congressional Districts. Oregon gained one seat following the 2020 Census, raising its total seats to 6 for this decade. The state legislature controls
 
 
 
