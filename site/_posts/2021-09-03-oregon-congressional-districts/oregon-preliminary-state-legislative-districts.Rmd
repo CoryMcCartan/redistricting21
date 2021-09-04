@@ -47,7 +47,7 @@ counties <- map %>%
     summarize(geometry = st_union(geometry)) %>%
     ggplot() +
     geom_sf(aes(fill = as.factor(cd_a), color = NULL)) +
-    geom_sf(data = counties, color = 'white', fill = '#ffffff1D', lwd = 1) +
+    geom_sf(data = counties, color = 'white', fill = '#ffffff1D') +
     theme_void() +
     guides(fill = 'none')} +
 {map %>%
@@ -55,7 +55,7 @@ counties <- map %>%
     summarize(geometry = st_union(geometry)) %>%
     ggplot() +
     geom_sf(aes(fill = as.factor(cd_b), color = NULL)) +
-    geom_sf(data = counties, color = 'white', fill = '#ffffff1D', lwd = 1) +
+    geom_sf(data = counties, color = 'white', fill = '#ffffff1D') +
     theme_void() +
     guides(fill = 'none')}
 ```
