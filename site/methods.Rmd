@@ -22,7 +22,8 @@ one at a time, across many maps in parallel. After each round of drawing distric
 
 # Our Scoring System
 
-We score most redistricting plans on two criteria: proportionality and representativeness.
+We give each redistricting plan a *Redistricting Analysis* Plan Score, based on
+two criteria: proportionality and representativeness.
 
 ### Proportionality
 

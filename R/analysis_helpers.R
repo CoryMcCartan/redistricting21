@@ -16,6 +16,51 @@ scale_color_party_d = function(...) {
                        labels=c("Rep.", "Dem."))
 }
 
+grades = list(
+    prop = wacolors::wa_pal("mountain", 5, type="continuous"),
+    repr = wacolors::wa_pal("forest_fire", 5, type="continuous")
+)
+for (i in names(grades)) names(grades[[i]]) = c("F", "D", "C", "B", "A")
+make_grade = function(pl) {
+    refs = which(nchar(colnames(as.matrix(pl))) > 0)
+    ref_names = unique(colnames(as.matrix(pl))[refs])
+    ndists = max(pl$district)
+    ref_seq = seq(by=ndists, length.out=length(ref_names))
+
+    grade_qty = function(qty) {
+        names(grades$prop)[ntile(qty, 5)[ref_seq]]
+    }
+
+    tibble(plan=ref_names,
+           proportion=grade_qty(pl$proportion),
+           prop_val=pl$proportion[ref_seq],
+           represent=grade_qty(pl$represent),
+           repr_val=pl$represent[ref_seq])
+}
+output_grades = function(gr) {
+    textcol = c(`F`="white", D="white", C="black", B="black", A="black")
+    fmter = function(x) stringr::str_replace(scales::number(x, 0.01), "-", "–")
+    purrr::pmap_chr(gr, function(plan, proportion, prop_val, represent, repr_val) {
+        str_glue('
+<h4>{plan}</h4>
+<div class="gradebox">
+<div class="grade" style="background: {grades$prop[proportion]}; color: {textcol[proportion]}">
+<div class="desc">Proportionality</div>
+<div class="letter">{proportion}</div>
+<div class="value">{fmter(prop_val)}</div>
+</div>
+<div class="grade" style="background: {grades$repr[represent]}; color: {textcol[represent]}">
+<div class="desc">Representativeness</div>
+<div class="letter">{represent}</div>
+<div class="value">{fmter(repr_val)}</div>
+</div>
+</div>')
+    }) %>%
+        c('<a href="/redistricting/site/docs/methods.html#our-scoring-system">
+          <h3 style="white-space: nowrap;">R.A. Plan Scores</h3></a>', .) %>%
+        cat(sep="\n")
+}
+
 
 plot_dem_distr = function(pl, ...) {
     dem_cols = names(pl)

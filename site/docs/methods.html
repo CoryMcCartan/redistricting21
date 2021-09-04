@@ -2122,7 +2122,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 
   /* Optional: embed custom fonts here with `@import`          */
   /* This must remain at the top of this file.                 */
-  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;800&family=Roboto:wght@300&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;800&family=Roboto:wght@300;900&display=swap');
 
 
 
@@ -2200,6 +2200,36 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 
   .byline h3 {
       font-family: var(--body-font);
+  }
+
+  .gradebox {
+      display: flex;
+      justify-content: center;
+  }
+  .grade {
+      margin: 4px;
+      padding: 0.8em;
+      border-radius: 6px;
+      flex-basis: 12em;
+  }
+  .desc {
+      text-transform: uppercase;
+      font-size: 0.6rem;
+  }
+  .letter {
+      font-weight: 800;
+      text-align: center;
+      font-size: 2rem;
+      line-height: 2rem;
+  }
+  .value {
+      text-align: center;
+      font-family: "Courier", monospace;
+      font-size: 0.7rem;
+  }
+
+  aside h4 {
+      margin-bottom: 0;
   }</style>
   <style type="text/css">
   /* base style */
@@ -2429,7 +2459,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <p>Often, we will also ensure that district boundaries follow county lines as much as possible.</p>
 <p>The algorithm works by starting off with a blank map and drawing new districts one at a time, across many maps in parallel. After each round of drawing districts,</p>
 <h1 id="our-scoring-system">Our Scoring System</h1>
-<p>We score most redistricting plans on two criteria: proportionality and representativeness.</p>
+<p>We give each redistricting plan a <em>Redistricting Analysis</em> Plan Score, based on two criteria: proportionality and representativeness.</p>
 <h3 id="proportionality">Proportionality</h3>
 <p>This is measured as the difference between the statewide Democratic popular vote and the share of seats won by Democrats. If negative, then the plan favors Democrats; if positive, it favors Republicans. An ideal plan would score zero. But often what scores are possible is an inevitable consequence of the state’s political geography. So we score a plan relative to the set of simulated, hypothetical plans. If it is in the top 20% of simulated plans by proportionality, it earns an “A”. If it is the next 20%, a “B”. And so on, with a plan in the bottom 20% scoring an “F”.</p>
 <h3 id="representativeness">Representativeness</h3>
