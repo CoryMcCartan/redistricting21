@@ -50,7 +50,8 @@ counties <- map %>%
     geom_sf(aes(fill = as.factor(cd_a), color = NULL)) +
     geom_sf(data = counties, color = 'white', fill = '#ffffff1D') +
     theme_void() +
-    guides(fill = 'none')} +
+    guides(fill = 'none') +
+    wacolors::scale_fill_wa_d()} +
 {map %>%
     group_by(cd_b) %>%
     summarize(geometry = st_union(geometry)) %>%
@@ -58,5 +59,6 @@ counties <- map %>%
     geom_sf(aes(fill = as.factor(cd_b), color = NULL)) +
     geom_sf(data = counties, color = 'white', fill = '#ffffff1D') +
     theme_void() +
-    guides(fill = 'none')}
+    guides(fill = 'none')+
+    wacolors::scale_fill_wa_d()}
 ```
