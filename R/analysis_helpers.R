@@ -39,7 +39,6 @@ make_grade = function(pl) {
 }
 output_grades = function(gr) {
     textcol = c(`F`="white", D="white", C="black", B="black", A="black")
-    fmter = function(x) stringr::str_replace(scales::number(x, 0.01), "-", "–")
     purrr::pmap_chr(gr, function(plan, proportion, prop_val, represent, repr_val) {
         str_glue('
 <h4>{plan}</h4>
@@ -47,18 +46,23 @@ output_grades = function(gr) {
 <div class="grade" style="background: {grades$prop[proportion]}; color: {textcol[proportion]}">
 <div class="desc">Proportionality</div>
 <div class="letter">{proportion}</div>
-<div class="value">{fmter(prop_val)}</div>
+<div class="value">{stringr::str_replace(scales::number(prop_val, 0.01), "-", "–")}</div>
 </div>
 <div class="grade" style="background: {grades$repr[represent]}; color: {textcol[represent]}">
 <div class="desc">Representativeness</div>
 <div class="letter">{represent}</div>
-<div class="value">{fmter(repr_val)}</div>
+<div class="value">{scales::percent(repr_val, 0.1)}</div>
 </div>
 </div>')
     }) %>%
         c('<a href="/redistricting/site/docs/methods.html#our-scoring-system">
           <h3 style="white-space: nowrap;">R.A. Plan Scores</h3></a>', .) %>%
         cat(sep="\n")
+}
+plot_mini_scores = function(pl) {
+    p1 = hist(pl, proportion, bins=32) + labs(x="Proportionality") + theme_r21()
+    p2 = hist(pl, represent, bins=32) + labs(x="Representativeness", y=NULL) + theme_r21()
+    p1 + p2 + plot_layout(guides="collect") & theme(legend.position = "top")
 }
 
 
