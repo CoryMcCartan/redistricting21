@@ -1,0 +1,53 @@
+---
+title: "Oregon: Two Plans, Two Gerrymanders"
+description: |
+    Colorado's Independent Redistricting Commission has released a 
+  preliminary map for the 2022-2030 state legislative districts districts.
+author:
+  - name: Cory McCartan
+    affiliation: Department of Statistics, Harvard University
+    url: https://corymccartan.github.io/
+  - name: Christopher T. Kenny
+    affiliation: Department of Government, Harvard University
+    url: https://www.christophertkenny.com/
+date: 09-03-2021
+output:
+  distill::distill_article:
+    self_contained: false
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo=FALSE, message=FALSE, warning=FALSE, dev="ragg_png")
+
+library(here)
+devtools::load_all(here("."))
+
+analysis = run_analysis("OR", "cd", "prelim")
+map = analysis$map
+plans = analysis$results
+```
+
+
+```{r}
+ker = function(x) pt((x-0.5)/0.035136, df=22)
+m_dem = district_group(plans$tol_01, dem)
+ndists = attr(map, "ndists")
+statewide = weighted.mean(plans$tol_01$dem[1:ndists], plans$tol_01$total_pop[1:ndists])
+plans$tol_01 %>%
+    group_by(draw) %>%
+    summarize(proportionality = statewide - sum(ker(dem)) / ndists) %>%
+    ungroup() %>%
+    mutate(representativeness = as.numeric(map$ndv %*% ker(m_dem) + 
+                                               map$nrv %*% ker(1-m_dem)) / 
+               sum(map$ndv + map$nrv)) %>%
+    hist(representativeness, bins=100)
+
+```
+
+
+```{r cd-map, fig.cap="The preliminary congressional districting plan.", fig.height=5}
+plot_cds(map, get_existing(map), COUNTYFP20, "CO")
+```
+
+
