@@ -1,0 +1,59 @@
+---
+title: How this works
+description: Some procedures an information common to all of our analyses.
+---
+
+
+# Redistricting Simulation
+In evaluating a redistricting plan, it is important to consider not just the partisan and other characteristics of the plan, but also what other plans might have been adopted in its stead.
+To do so, we generate a large number of random redistricting plans according to a set of criteria, using a recently-developed computer algorithm ([McCartan and Imai 2020](https://arxiv.org/abs/2008.06131)).
+This algorithm generates redistricting plans which:
+
+* Have districts with equal populations (up to a chosen percentage deviation from full equality)
+* Have geographically contiguous districts 
+* Have districts which are compact (i.e., no strange shapes)
+* Are not generated using any political information.
+
+Often, we will also ensure that district boundaries follow county lines as much
+as possible.
+
+The algorithm works by starting off with a blank map and drawing new districts
+one at a time, across many maps in parallel. After each round of drawing districts,
+
+# Our Scoring System
+
+We score most redistricting plans on two criteria: proportionality and representativeness.
+
+### Proportionality
+
+This is measured as the difference between the statewide Democratic popular vote
+and the share of seats won by Democrats.  If negative, then the plan favors
+Democrats; if positive, it favors Republicans. An ideal plan would score zero.
+But often what scores are possible is an inevitable consequence of the state's
+political geography. So we score a plan relative to the set of simulated,
+hypothetical plans.  If it is in the top 20% of simulated plans by
+proportionality, it earns an "A". If it is the next 20%, a "B". And so on, with
+a plan in the bottom 20% scoring an "F".
+
+### Representativeness
+
+This is measured as the odds than an average voter will be represented by a
+legislator of their preferred party; the higher this value is, the better. As
+with proportionality, how well a plan scores according to this metric depends on
+the state's political geography, so we score a plan relative to the simulated
+plans.  Just like with proportionality, if it is in the top 20% of hypothetical
+plans by proportionality, it earns an "A", and so on.
+
+# Data
+
+Most data used in these analyses is sourced from the [ALARM Project's precinct-level data files](https://alarm-redist.github.io/posts/2021-08-10-census-2020/),
+which use data from the 2020 Census and the [Voting and Election Science Team](https://dataverse.harvard.edu/dataverse/electionscience). 
+Cleaned data in formatted to work with our [analysis software packages](https://alarm-redist.github.io/redist/) is available [here](https://github.com/CoryMcCartan/redistricting21).
+
+To produce election data using 2020 precinct boundaries, election results were
+projected down to the 2010 block level using voting-age population as weights.
+Results for 2020 blocks were then estimated using 2010 blocks and the
+[land-use-based crosswalk files](https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/T9VMJO)
+from VEST. Finally, 2020 blocks were aggregated to 2020 precincts using the 
+Census' 2020 [block assignment files](https://www.census.gov/geographies/reference-files/time-series/geo/block-assignment-files.html).
+

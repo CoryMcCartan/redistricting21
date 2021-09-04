@@ -86,26 +86,29 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 </style>
 
   <!--radix_placeholder_meta_tags-->
-  <title>Redistricting Analysis: About</title>
+  <title>Redistricting Analysis: How this works</title>
 
+  <meta property="description" itemprop="description" content="Some procedures an information common to all of our analyses."/>
 
 
 
   <!--  https://developers.facebook.com/docs/sharing/webmasters#markup -->
-  <meta property="og:title" content="Redistricting Analysis: About"/>
+  <meta property="og:title" content="Redistricting Analysis: How this works"/>
   <meta property="og:type" content="article"/>
+  <meta property="og:description" content="Some procedures an information common to all of our analyses."/>
   <meta property="og:locale" content="en_US"/>
   <meta property="og:site_name" content="Redistricting Analysis"/>
 
   <!--  https://dev.twitter.com/cards/types/summary -->
   <meta property="twitter:card" content="summary"/>
-  <meta property="twitter:title" content="Redistricting Analysis: About"/>
+  <meta property="twitter:title" content="Redistricting Analysis: How this works"/>
+  <meta property="twitter:description" content="Some procedures an information common to all of our analyses."/>
 
   <!--/radix_placeholder_meta_tags-->
   <!--radix_placeholder_rmarkdown_metadata-->
 
   <script type="text/json" id="radix-rmarkdown-metadata">
-  {"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title"]}},"value":[{"type":"character","attributes":{},"value":["About"]}]}
+  {"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","description"]}},"value":[{"type":"character","attributes":{},"value":["How this works"]},{"type":"character","attributes":{},"value":["Some procedures an information common to all of our analyses."]}]}
   </script>
   <!--/radix_placeholder_rmarkdown_metadata-->
   <!--radix_placeholder_navigation_in_header-->
@@ -2380,7 +2383,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <!--radix_placeholder_front_matter-->
 
 <script id="distill-front-matter" type="text/json">
-{"title":"About","authors":[]}
+{"title":"How this works","description":"Some procedures an information common to all of our analyses.","authors":[]}
 </script>
 
 <!--/radix_placeholder_front_matter-->
@@ -2407,25 +2410,33 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <!--/radix_placeholder_site_before_body-->
 
 <div class="d-title">
-<h1>About</h1>
+<h1>How this works</h1>
 <!--radix_placeholder_categories-->
 <!--/radix_placeholder_categories-->
-
+<p>Some procedures an information common to all of our analyses.</p>
 </div>
 
 
 <div class="d-article">
-<p>The 2021 redistricting cycle will be extremely consequential, setting legislative and congressional boundaries for a decade, just as computing power and new data allow map-drawers to create sophisticated partisan gerrymanders, and the Supreme Court has stepped back from policing them.</p>
-<p>We put together this site to analyze redistricting plans as states release them, in context. In context means we will employ cutting-edge redistricting simulation methodologies to create large numbers of alternative plans. This helps make better judgement about the quality of a proposed or finalized plan, by making comparisons to other plans which also respect municipal, state, and federal requirements for redistricting.</p>
-<p>We rely entirely on open source tools and data, so that anyone (with a bit of R familiarity) can replicate the analysis and make changes to it.</p>
-<p>We will attempt to cover as many state plans as we are able. This map summarizes the state of our current analyses.</p>
-<figure>
-<img src="https://raw.githubusercontent.com/CoryMcCartan/redistricting21/main/images/summary.svg" alt="Our analyses" /><figcaption aria-hidden="true">Our analyses</figcaption>
-</figure>
-<h1 id="about-the-authors">About the Authors</h1>
-<p><a href="https://corymccartan.github.io/">Cory McCartan</a> is a PhD Candidate in Statistics at Harvard University. He is the author of the R packages <a href="https://github.com/CoryMcCartan/blockpop">blockpop</a>, <a href="https://cran.r-project.org/web/packages/wacolors/index.html">wacolors</a>, and <a href="https://corymccartan.github.io/adjustr/">adjustr</a>.</p>
-<p><a href="https://www.christophertkenny.com/">Chris Kenny</a> is a PhD Candidate in Government at Harvard University. He studies redistricting and Census policy-making. He is the author of the R packages <a href="https://christopherkenny.github.io/geomander/">geomander</a> and <a href="https://christopherkenny.github.io/ppmf/">ppmf</a>.</p>
-<p>The authors are members of the <a href="https://alarm-redist.github.io/">Algorithm Assisted Redistricting Methodology (ALARM) Project</a>, and are coauthors of the R packages <a href="https://alarm-redist.github.io/redist/">redist</a> (with Ben Fifield and Kosuke Imai) and <a href="https://corymccartan.github.io/PL94171/">PL94171</a>.</p>
+<h1 id="redistricting-simulation">Redistricting Simulation</h1>
+<p>In evaluating a redistricting plan, it is important to consider not just the partisan and other characteristics of the plan, but also what other plans might have been adopted in its stead. To do so, we generate a large number of random redistricting plans according to a set of criteria, using a recently-developed computer algorithm (<a href="https://arxiv.org/abs/2008.06131">McCartan and Imai 2020</a>). This algorithm generates redistricting plans which:</p>
+<ul>
+<li>Have districts with equal populations (up to a chosen percentage deviation from full equality)</li>
+<li>Have geographically contiguous districts</li>
+<li>Have districts which are compact (i.e., no strange shapes)</li>
+<li>Are not generated using any political information.</li>
+</ul>
+<p>Often, we will also ensure that district boundaries follow county lines as much as possible.</p>
+<p>The algorithm works by starting off with a blank map and drawing new districts one at a time, across many maps in parallel. After each round of drawing districts,</p>
+<h1 id="our-scoring-system">Our Scoring System</h1>
+<p>We score most redistricting plans on two criteria: proportionality and representativeness.</p>
+<h3 id="proportionality">Proportionality</h3>
+<p>This is measured as the difference between the statewide Democratic popular vote and the share of seats won by Democrats. If negative, then the plan favors Democrats; if positive, it favors Republicans. An ideal plan would score zero. But often what scores are possible is an inevitable consequence of the state’s political geography. So we score a plan relative to the set of simulated, hypothetical plans. If it is in the top 20% of simulated plans by proportionality, it earns an “A”. If it is the next 20%, a “B”. And so on, with a plan in the bottom 20% scoring an “F”.</p>
+<h3 id="representativeness">Representativeness</h3>
+<p>This is measured as the odds than an average voter will be represented by a legislator of their preferred party; the higher this value is, the better. As with proportionality, how well a plan scores according to this metric depends on the state’s political geography, so we score a plan relative to the simulated plans. Just like with proportionality, if it is in the top 20% of hypothetical plans by proportionality, it earns an “A”, and so on.</p>
+<h1 id="data">Data</h1>
+<p>Most data used in these analyses is sourced from the <a href="https://alarm-redist.github.io/posts/2021-08-10-census-2020/">ALARM Project’s precinct-level data files</a>, which use data from the 2020 Census and the <a href="https://dataverse.harvard.edu/dataverse/electionscience">Voting and Election Science Team</a>. Cleaned data in formatted to work with our <a href="https://alarm-redist.github.io/redist/">analysis software packages</a> is available <a href="https://github.com/CoryMcCartan/redistricting21">here</a>.</p>
+<p>To produce election data using 2020 precinct boundaries, election results were projected down to the 2010 block level using voting-age population as weights. Results for 2020 blocks were then estimated using 2010 blocks and the <a href="https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/T9VMJO">land-use-based crosswalk files</a> from VEST. Finally, 2020 blocks were aggregated to 2020 precincts using the Census’ 2020 <a href="https://www.census.gov/geographies/reference-files/time-series/geo/block-assignment-files.html">block assignment files</a>.</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
 <!--radix_placeholder_article_footer-->
 <!--/radix_placeholder_article_footer-->

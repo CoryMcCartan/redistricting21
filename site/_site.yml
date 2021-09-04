@@ -8,6 +8,8 @@ navbar:
   right:
     - text: "Home"
       href: index.html
+    - text: "How this works"
+      href: methods.html
     - text: "About"
       href: about.html
     - icon: fab fa-github
