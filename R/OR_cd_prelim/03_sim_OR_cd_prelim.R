@@ -40,6 +40,13 @@ simulate = function(map) {
                    minority = group_frac(map, pop - pop_white))
     })
 
+    steps <- ((1:7)/8 *
+        (1 - min(plans$sb$score, na.rm = TRUE)) +
+        min(plans$sb$score, na.rm = TRUE))
+    sub <- unlist(lapply(seq_len(length(steps)),
+                         \(x) as.integer(plans$sb$draw[which.min(abs(plans$sb$score - steps[x]))])))
+    plans$sb <- plans$sb %>% filter(draw %in% sub)
+
     # pl = do.call('rbind', plans)
     path = "data/OR/OR_cd_prelim_results.rds"
     write_rds(plans, here(path), compress="xz")
