@@ -28,9 +28,17 @@ simulate = function(map) {
         sb = plans2
     )
 
-    plans = purrr::map(plans, function(p) {
-        p %>%
+    ndists = attr(map, "ndists")
+    dvote = map$ndv
+    rvote = map$ndv
+    statewide = sum(dvote) / (sum(dvote) + sum(rvote))
+    ker = function(x) pt((x-0.5)/0.035136, df=22)
+
+    plans = purrr::imap(plans, function(p, name) {
+        p = p %>%
+            subset_sampled() %>%
             add_reference(map$cd_b, "cd_b") %>%
+            add_reference(map$cd_a, "cd_a") %>%
             mutate(dev =  plan_parity(map),
                    comp = distr_compactness(map),
                    county_splits = county_splits(map, county),
@@ -38,6 +46,15 @@ simulate = function(map) {
                    black = group_frac(map, pop_black),
                    hisp = group_frac(map, pop_hisp),
                    minority = group_frac(map, pop - pop_white))
+
+        m_dem = ker(district_group(p, dem))
+
+        p %>%
+            mutate(represent = rep(as.numeric(dvote %*% m_dem + rvote %*% (1-m_dem)) /
+                       sum(dvote + rvote), each=ndists)) %>%
+            group_by(draw) %>%
+            mutate(proportion = statewide - sum(ker(dem)) / ndists) %>%
+            ungroup()
     })
 
     steps <- ((1:7)/8 *
