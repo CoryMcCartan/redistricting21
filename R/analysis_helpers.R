@@ -81,8 +81,21 @@ plot_dem_distr = function(pl, ...) {
     wrap_plots(p, ...) + plot_layout(guides="collect")
 }
 
+#' Plot Congressional Districts
+#'
+#' @param map redist_map object
+#' @param pl redist_plans object
+#' @param county unqouted county name
+#' @param abbr string, state abbreviation
+#' @param city boolean. Plot cities? Default is FALSE.
+#'
+#' @return ggplot
+#' @export
+#'
+#' @examples
+#' #TODO
 plot_cds = function(map, pl, county, abbr, city=FALSE) {
-    plan = as.factor(redist:::color_graph(get_adj(map), as.integer(pl)))
+    plan = redist:::color_graph(get_adj(map), as.integer(pl))
     places = suppressMessages(tigris::places(abbr, cb=TRUE))
     if (city) {
         cities = arrange(places, desc(ALAND)) %>%
