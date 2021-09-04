@@ -27,9 +27,7 @@ map = analysis$map
 plans = analysis$results
 ```
 
-On September 3, 2021, the House Interim Committee on Redistricting released two opposing plans as potential starting points for drawing Congressional Districts. Oregon gained one seat following the 2020 Census, raising its total seats to 6 for this decade. The state legislature controls
-
-
+On September 3, 2021, the House Interim Committee on Redistricting [released two opposing plans](https://www.oregonlegislature.gov/redistricting) as potential starting points for drawing Congressional Districts. Oregon gained one seat following the 2020 Census, raising its total seats to 6 for this decade. In Oregon, plans are proposed by the state legislature and signed by the governor as regular legislation. Currently, both the state legislature and governor's office are controlled by Democrats.
 
 ```{r cd-map, fig.cap="The preliminary congressional districting plan.", fig.height=5}
 plot_cds(map, get_existing(map), COUNTYFP20, "CO")
