@@ -40,9 +40,9 @@ simulate = function(map) {
                    minority = group_frac(map, pop - pop_white))
     })
 
-    pl = bind_rows(plans, .id="sim")
+    # pl = do.call('rbind', plans)
     path = "data/OR/OR_cd_prelim_results.rds"
-    write_rds(pl, here(path), compress="xz")
+    write_rds(plans, here(path), compress="xz")
 
     pl
 }
