@@ -48,7 +48,7 @@ counties <- map %>%
     summarize(geometry = st_union(geometry)) %>%
     ggplot() +
     geom_sf(aes(fill = as.factor(cd_a), color = NULL)) +
-    geom_sf(data = counties, color = 'white', fill = "#ffffff1D") +
+    geom_sf(data = counties, color = 'white', fill = '#ffffff1D', lwd = 1) +
     theme_void() +
     guides(fill = 'none')} +
 {map %>%
@@ -56,13 +56,7 @@ counties <- map %>%
     summarize(geometry = st_union(geometry)) %>%
     ggplot() +
     geom_sf(aes(fill = as.factor(cd_b), color = NULL)) +
-    geom_sf(data = counties, color = 'white', fill = "#ffffff1D") +
+    geom_sf(data = counties, color = 'white', fill = '#ffffff1D') +
     theme_void() +
     guides(fill = 'none')}
-```
-
-```{r cd-map, fig.cap="The preliminary congressional districting plan.", fig.height=4}
-p1 = plot_cds(map, map$cd_a, county, "OR") + labs(title="Plan A (Democratic)")
-p2 = plot_cds(map, map$cd_b, county, "OR") + labs(title="Plan B (Republican)")
-p1 + p2
 ```
