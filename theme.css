@@ -10,7 +10,7 @@
 
 /* Optional: embed custom fonts here with `@import`          */
 /* This must remain at the top of this file.                 */
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;800&family=Roboto:wght@300&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;800&family=Roboto:wght@300;900&display=swap');
 
 
 
@@ -88,4 +88,34 @@ h1.posts-list-caption {
 
 .byline h3 {
     font-family: var(--body-font);
+}
+
+.gradebox {
+    display: flex;
+    justify-content: center;
+}
+.grade {
+    margin: 4px;
+    padding: 0.8em;
+    border-radius: 6px;
+    flex-basis: 12em;
+}
+.desc {
+    text-transform: uppercase;
+    font-size: 0.6rem;
+}
+.letter {
+    font-weight: 800;
+    text-align: center;
+    font-size: 2rem;
+    line-height: 2rem;
+}
+.value {
+    text-align: center;
+    font-family: "Courier", monospace;
+    font-size: 0.7rem;
+}
+
+aside h4 {
+    margin-bottom: 0;
 }
