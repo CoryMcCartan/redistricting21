@@ -30,15 +30,15 @@ simulate = function(map) {
 
     ndists = attr(map, "ndists")
     dvote = map$ndv
-    rvote = map$ndv
+    rvote = map$nrv
     statewide = sum(dvote) / (sum(dvote) + sum(rvote))
     ker = function(x) pt((x-0.5)/0.035136, df=22)
 
     plans = purrr::imap(plans, function(p, name) {
         p = p %>%
             subset_sampled() %>%
-            add_reference(map$cd_b, "cd_b") %>%
-            add_reference(map$cd_a, "cd_a") %>%
+            add_reference(map$cd_b, "Plan B") %>%
+            add_reference(map$cd_a, "Plan A") %>%
             mutate(dev =  plan_parity(map),
                    comp = distr_compactness(map),
                    county_splits = county_splits(map, county),
