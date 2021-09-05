@@ -34,8 +34,9 @@ data/**/*_sims.rds
 
 # site stuff
 site/_posts/**/site_libs
-site/_posts/**/*_files
+site/_posts/**/*_files/*
+site/_posts/**/*.js
 site/_posts/**/*.html
 site/_posts/**/*.png
-!site/_posts/docs/*.html
-!site/_posts/docs/*.png
+!site/docs/*.html
+!site/docs/*.png

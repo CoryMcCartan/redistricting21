@@ -1,7 +1,7 @@
 ---
-title: "Oregon: Two Plans, Two Gerrymanders?"
+title: "Oregon: Splitting the Difference"
 description: |
-    The Oregon State Legislature House Interim Committee On Redistricting released two draft plans for consideration for their 6 Congressionial Districts for 2022-2030.
+    The Oregon State Legislature's redistricting committees released two draft plans for consideration for the state's six congressionial districts.
 author:
   - name: Cory McCartan
     affiliation: Department of Statistics, Harvard University
