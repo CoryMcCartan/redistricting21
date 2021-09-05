@@ -2202,13 +2202,16 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
       font-family: var(--body-font);
   }
 
+  d-article {
+      overflow: visible;
+  }
+
   .gradebox {
       display: flex;
-      justify-content: center;
   }
   .grade {
-      margin: 4px;
-      padding: 0.8em;
+      margin: 3px;
+      padding: 0.5em 0.7em;
       border-radius: 6px;
       flex-basis: 12em;
   }
@@ -2230,6 +2233,22 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 
   aside h4 {
       margin-bottom: 0;
+  }
+  aside h3 {
+      margin-top: 0;
+  }
+
+  aside {
+      margin-bottom: -40em;
+  }
+  @media(max-width: 768px) {
+      aside {
+          margin-bottom: 1em;
+      }
+  }
+
+  aside p > img {
+      max-width: 140% !important;
   }</style>
   <style type="text/css">
   /* base style */
@@ -2457,7 +2476,10 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <li>Are not generated using any political information.</li>
 </ul>
 <p>Often, we will also ensure that district boundaries follow county lines as much as possible.</p>
-<p>The algorithm works by starting off with a blank map and drawing new districts one at a time, across many maps in parallel. After each round of drawing districts,</p>
+<p>The algorithm works by starting off with a blank map and drawing new districts one at a time, across many maps in parallel. After each round of drawing districts, the set of partially-drawn redistricting plans is shuffled around, with some plans dropping out and other plans being copied, according to a mathematical formula. This shuffling and discarding and copying ensures that the simulated redistricting plans are truly representative and do not contain any unknown or hidden biases.</p>
+<h3 id="district-vote-share-plots">District Vote Share Plots</h3>
+<p>For most plans, we’ll spin up a graph like the ones below, from Colorado’s preliminary districts. Each dot represents a district in a possible plan, with blue dots representing Democratic-controlled districts and red dots Republican-controlled districts, and the districts are arranged by how Democratic they are. The black lines show the estimated election results under the newly-proposed plan. When these lines are lower than their corresponding set of points, that indicates that the proposed district has fewer Democratic voters than would be expected under an average fair and neutral map.</p>
+<p><img src="posts/2021-06-25-colorado-preliminary-congressional-districts/colorado-preliminary-congressional-districts_files/figure-html5/dem-distrs-1.png" /></p>
 <h1 id="our-scoring-system">Our Scoring System</h1>
 <p>We give each redistricting plan a <em>Redistricting Analysis</em> Plan Score, based on two criteria: proportionality and representativeness.</p>
 <h3 id="proportionality">Proportionality</h3>

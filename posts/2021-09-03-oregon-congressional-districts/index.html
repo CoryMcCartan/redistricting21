@@ -118,7 +118,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <!--/radix_placeholder_rmarkdown_metadata-->
   
   <script type="text/json" id="radix-resource-manifest">
-  {"type":"character","attributes":{},"value":["oregon-preliminary-state-legislative-districts_files/anchor-4.2.2/anchor.min.js","oregon-preliminary-state-legislative-districts_files/bowser-1.9.3/bowser.min.js","oregon-preliminary-state-legislative-districts_files/distill-2.2.21/template.v2.js","oregon-preliminary-state-legislative-districts_files/figure-html5/cd-map-1.png","oregon-preliminary-state-legislative-districts_files/figure-html5/unnamed-chunk-2-1.png","oregon-preliminary-state-legislative-districts_files/figure-html5/unnamed-chunk-2-2.png","oregon-preliminary-state-legislative-districts_files/header-attrs-2.9/header-attrs.js","oregon-preliminary-state-legislative-districts_files/jquery-1.11.3/jquery.min.js","oregon-preliminary-state-legislative-districts_files/popper-2.6.0/popper.min.js","oregon-preliminary-state-legislative-districts_files/tippy-6.2.7/tippy-bundle.umd.min.js","oregon-preliminary-state-legislative-districts_files/tippy-6.2.7/tippy-light-border.css","oregon-preliminary-state-legislative-districts_files/tippy-6.2.7/tippy.css","oregon-preliminary-state-legislative-districts_files/tippy-6.2.7/tippy.umd.min.js","oregon-preliminary-state-legislative-districts_files/webcomponents-2.0.0/webcomponents.js"]}
+  {"type":"character","attributes":{},"value":["oregon-preliminary-congressional-districts_files/anchor-4.2.2/anchor.min.js","oregon-preliminary-congressional-districts_files/bowser-1.9.3/bowser.min.js","oregon-preliminary-congressional-districts_files/distill-2.2.21/template.v2.js","oregon-preliminary-congressional-districts_files/figure-html5/best-1.png","oregon-preliminary-congressional-districts_files/figure-html5/cd-map-1.png","oregon-preliminary-congressional-districts_files/figure-html5/dem-distrs-1.png","oregon-preliminary-congressional-districts_files/figure-html5/maps-1.png","oregon-preliminary-congressional-districts_files/figure-html5/prop-repr-1.png","oregon-preliminary-congressional-districts_files/header-attrs-2.9/header-attrs.js","oregon-preliminary-congressional-districts_files/jquery-1.11.3/jquery.min.js","oregon-preliminary-congressional-districts_files/popper-2.6.0/popper.min.js","oregon-preliminary-congressional-districts_files/tippy-6.2.7/tippy-bundle.umd.min.js","oregon-preliminary-congressional-districts_files/tippy-6.2.7/tippy-light-border.css","oregon-preliminary-congressional-districts_files/tippy-6.2.7/tippy.css","oregon-preliminary-congressional-districts_files/tippy-6.2.7/tippy.umd.min.js","oregon-preliminary-congressional-districts_files/webcomponents-2.0.0/webcomponents.js"]}
   </script>
   <!--radix_placeholder_navigation_in_header-->
 <meta name="distill:offset" content="../.."/>
@@ -2211,6 +2211,10 @@ h1.posts-list-caption {
     font-family: var(--body-font);
 }
 
+d-article {
+    overflow: visible;
+}
+
 .gradebox {
     display: flex;
 }
@@ -2238,6 +2242,18 @@ h1.posts-list-caption {
 
 aside h4 {
     margin-bottom: 0;
+}
+aside h3 {
+    margin-top: 0;
+}
+
+aside {
+    margin-bottom: -40em;
+}
+@media(max-width: 768px) {
+    aside {
+        margin-bottom: 1em;
+    }
 }
 
 aside p > img {
@@ -2468,11 +2484,10 @@ gtag('config', 'UA-79274202-4');
 </div>
 
 <div class="d-article">
-<p>On September 3, 2021, the House Interim Committee on Redistricting <a href="https://www.oregonlegislature.gov/redistricting">released two opposing plans</a> as potential starting points for drawing Congressional Districts. Oregon gained one seat following the 2020 Census, raising its total seats to 6 for this decade. In Oregon, plans are proposed by the state legislature and signed by the governor as regular legislation. Currently, both the state legislature and governor’s office are controlled by Democrats.</p>
 <aside>
 <div class="layout-chunk" data-layout="l-body">
-<a href="/redistricting/site/docs/methods.html#our-scoring-system">
-<h3 style="white-space: nowrap;">
+<a href="../../methods.html#our-scoring-system">
+<h3 style="white-space: nowrap;" id="plans-scores">
 R.A. Plan Scores
 </h3>
 </a>
@@ -2532,14 +2547,58 @@ D
 </div>
 </div>
 </aside>
-<div class="layout-chunk" data-layout="l-body">
+<p>On September 3, 2021, the Senate and House Interim Committees on Redistricting <a href="https://www.oregonlegislature.gov/redistricting">released two opposing plans</a> as potential starting points for drawing Congressional Districts. Oregon gained one seat following the 2020 Census, raising its total seats to 6 for this decade. In Oregon, plans are proposed by the state legislature and signed by the governor as regular legislation. Currently, both the state legislature and governor’s office are controlled by Democrats.</p>
+<p>“Plan A” was released by the committees’ Democrats, and “Plan B” by the Republicans. Since Democrats control the legislative process, Plan A, or something like it, is significantly more likely to be enacted. Traditionally, however, redistricting in Oregon <a href="https://www.opb.org/article/2021/09/03/oregon-politics-redistricting-map-democratcs-republicans-debate-congressional-districts/">has been relatively bipartisan</a>. The final enacted plan may differ significantly from both Plan A and Plan B.</p>
+<div class="layout-chunk" data-layout="l-page">
 <div class="figure"><span style="display:block;" id="fig:cd-map"></span>
-<img src="oregon-preliminary-state-legislative-districts_files/figure-html5/cd-map-1.png" alt="The preliminary congressional districting plan." width="624" />
+<img src="oregon-preliminary-congressional-districts_files/figure-html5/cd-map-1.png" alt="The preliminary congressional districting plans." width="1152" />
 <p class="caption">
-Figure 1: The preliminary congressional districting plan.
+Figure 1: The preliminary congressional districting plans.
 </p>
 </div>
 </div>
+<p>Oregon is dominated, demographically and politically, by the Portland metropolitan area. The state went 55% Democratic in 2016. This presents a challenge for Democratic map-drawers, who need to figure out a way to spread Democratic votes from Portland to the rest of the state, while preserving communities of interest and avoiding non-compact districts.</p>
+<div class="layout-chunk" data-layout="l-page">
+<div class="figure"><span style="display:block;" id="fig:maps"></span>
+<img src="oregon-preliminary-congressional-districts_files/figure-html5/maps-1.png" alt="Population density and political patterns (2016 election) in Oregon." width="1152" />
+<p class="caption">
+Figure 2: Population density and political patterns (2016 election) in Oregon.
+</p>
+</div>
+</div>
+<h1 id="political-features-of-the-proposed-maps">Political Features of the Proposed Maps</h1>
+<p><a href="../../methods.html">As with all of our analyses</a>, we compare these proposed plans with a large set of simulated plans, allowing us to understand how they differ from what might be reasonably expected.</p>
+<div class="layout-chunk" data-layout="l-body-outset">
+<div class="figure"><span style="display:block;" id="fig:dem-distrs"></span>
+<img src="oregon-preliminary-congressional-districts_files/figure-html5/dem-distrs-1.png" alt="Democratic vote by district for the proposed plan and for 10,000 alternative plans. [Learn more about this plot](../../methods.html#district-vote-share-plots)" width="768" />
+<p class="caption">
+Figure 3: Democratic vote by district for the proposed plan and for 10,000 alternative plans. <a href="../../methods.html#district-vote-share-plots">Learn more about this plot</a>
+</p>
+</div>
+</div>
+<p>Plan A has a relatively safe 5D–1R split, which is more than the 4D–2R split that is most common from our set of simulations (with one seat from each party being competitive). The least-Democratic seat (numbered 2 on the figure below) is a particularly egregious departure from the set of simulated alternatives—no sampled plan came anywhere close to it. Plan B has a much safer Republican seat and 3 competitive seats that in a Republican-favoring year like 2016 could go Republican, leading to a 2D–4R split. Unsurprisingly, each plan favors the party that drew it.</p>
+<h1 id="proportionality-and-representativeness">Proportionality and Representativeness</h1>
+<p>All our plans are given two R.A. Plan Scores, one for proportionality—how close the seats distribution reflects the statewide vote—and one for representativeness—the odds that an average voter is represented by their preferred political party. The scores for Oregon are <a href="#plans-scores">shown above</a>. The graph below shows the proportionality and representativeness for all of our simulated redistricting plans, and the two proposed plans.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="figure"><span style="display:block;" id="fig:prop-repr"></span>
+<img src="oregon-preliminary-congressional-districts_files/figure-html5/prop-repr-1.png" alt="Proportionality and representativeness for the redistricting plans. [Learn more about these measures](../../methods.html#our-scoring-system)" width="672" />
+<p class="caption">
+Figure 4: Proportionality and representativeness for the redistricting plans. <a href="../../methods.html#our-scoring-system">Learn more about these measures</a>
+</p>
+</div>
+</div>
+<p>The GOP Plan B is slightly less representative than the Democratic Plan A, but is vastly more proportional.</p>
+<p>What would a good plan look like according to these two measures? The map below is the simulated redistricting plan which scored the combined best on proportionality and representativeness. It has two safe Republican seats, three safe Democratic seats, and one competitive seat.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="figure"><span style="display:block;" id="fig:best"></span>
+<img src="oregon-preliminary-congressional-districts_files/figure-html5/best-1.png" alt="The sampled plan with the best combination of proportionality and representativeness, with Democratic vote shares labelled." width="672" />
+<p class="caption">
+Figure 5: The sampled plan with the best combination of proportionality and representativeness, with Democratic vote shares labelled.
+</p>
+</div>
+</div>
+<h1 id="a-compromise-plan">A Compromise Plan</h1>
+<p>Unfortunately, this “best plan” doesn’t look much like either Plan A or Plan B. What might a compromise plan look like that is somewhere in between those two?</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
 <!--radix_placeholder_article_footer-->
 <!--/radix_placeholder_article_footer-->

@@ -2217,13 +2217,16 @@ h1.posts-list-caption {
     font-family: var(--body-font);
 }
 
+d-article {
+    overflow: visible;
+}
+
 .gradebox {
     display: flex;
-    justify-content: center;
 }
 .grade {
-    margin: 4px;
-    padding: 0.8em;
+    margin: 3px;
+    padding: 0.5em 0.7em;
     border-radius: 6px;
     flex-basis: 12em;
 }
@@ -2245,6 +2248,22 @@ h1.posts-list-caption {
 
 aside h4 {
     margin-bottom: 0;
+}
+aside h3 {
+    margin-top: 0;
+}
+
+aside {
+    margin-bottom: -40em;
+}
+@media(max-width: 768px) {
+    aside {
+        margin-bottom: 1em;
+    }
+}
+
+aside p > img {
+    max-width: 140% !important;
 }</style>
 <style type="text/css">
 /* base style */

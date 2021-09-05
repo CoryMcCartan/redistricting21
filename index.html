@@ -2199,13 +2199,16 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
       font-family: var(--body-font);
   }
 
+  d-article {
+      overflow: visible;
+  }
+
   .gradebox {
       display: flex;
-      justify-content: center;
   }
   .grade {
-      margin: 4px;
-      padding: 0.8em;
+      margin: 3px;
+      padding: 0.5em 0.7em;
       border-radius: 6px;
       flex-basis: 12em;
   }
@@ -2227,6 +2230,22 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 
   aside h4 {
       margin-bottom: 0;
+  }
+  aside h3 {
+      margin-top: 0;
+  }
+
+  aside {
+      margin-bottom: -40em;
+  }
+  @media(max-width: 768px) {
+      aside {
+          margin-bottom: 1em;
+      }
+  }
+
+  aside p > img {
+      max-width: 140% !important;
   }</style>
   <style type="text/css">
   /* base style */
@@ -2580,7 +2599,7 @@ function init_posts_list() {
 </div>
 </div>
 <div class="thumbnail">
-<img src="posts/2021-09-03-oregon-congressional-districts/oregon-preliminary-state-legislative-districts_files/figure-html5/cd-map-1.png"/>
+<img src="posts/2021-09-03-oregon-congressional-districts/oregon-preliminary-congressional-districts_files/figure-html5/cd-map-1.png"/>
 </div>
 <div class="description">
 <h2>Oregon: Two Plans, Two Gerrymanders?</h2>
