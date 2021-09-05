@@ -195,6 +195,8 @@ plot_prop_repr = function(pl) {
         geom_point(size=0.6, alpha=0.4) +
         geom_point(aes(shape=draw), color="white", size=5, data=subset_ref(x)) +
         geom_point(aes(shape=draw), color="black", size=3.5, data=subset_ref(x)) +
+        geom_rug(alpha=0.02, length=unit(0.015, "npc")) +
+        geom_rug(data=subset_ref(x), size=0.65, color="black", length=unit(0.015, "npc")) +
         scale_color_wa_d("diablo", name="Dem. seats",
                          guide=guide_legend(override.aes=list(size=6, alpha=1, shape=15))) +
         labs(x="Proportionality", y="Representativeness", shape=NULL) +
