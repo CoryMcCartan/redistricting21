@@ -9,7 +9,7 @@ author:
   - name: Christopher T. Kenny
     affiliation: Department of Government, Harvard University
     url: https://www.christophertkenny.com/
-date: 09-03-2021
+date: 09-05-2021
 output:
   distill::distill_article:
     self_contained: false
@@ -44,10 +44,12 @@ Since Democrats control the legislative process, Plan A, or something like it, i
 Traditionally, however, redistricting in Oregon [has been relatively bipartisan](https://www.opb.org/article/2021/09/03/oregon-politics-redistricting-map-democratcs-republicans-debate-congressional-districts/).
 The final enacted plan may differ significantly from both Plan A and Plan B.
 
-
-```{r cd-map, layout="l-page", fig.width=12, fig.height=5, fig.cap="The preliminary congressional districting plans."}
+```{r, results = 'hide'}
 p1 = plot_cds(map, map$cd_a, county, "OR") + labs(title="Plan A (Democratic)")
 p2 = plot_cds(map, map$cd_b, county, "OR") + labs(title="Plan B (Republican)")
+```
+
+```{r cd-map, layout="l-page", fig.width=12, fig.height=5, fig.cap="The preliminary congressional districting plans."}
 p1 + p2
 ```
 
@@ -128,6 +130,7 @@ plot_cds(map, last_plan(best), county, "OR") +
 How might we locate a compromise plan between these two? The two proposed plans are clearly very different. Quantifying the differences can be difficult for redistricting plans. We opt to use a variation of information metric. It is scaled so that a score of 0 indicates that the maps are completely different while a score of 1 indicates that the maps are identical. With those scores, we utilize a simple, but effective optimization method known as [short bursts](https://arxiv.org/pdf/2011.02288.pdf) to traverse the information space between plans.
 
 Below, we present 7 intermediate plans, which are approximately evenly spaced in information space between Plan A and Plan B.
+
 ```{r gold-plans}
 p <- vector(mode = 'list', length = 9)
 sb <- plans$sb %>% subset_sampled() %>% get_plans_matrix()
@@ -144,6 +147,7 @@ wrap_plots(p)
 ```
 
 The middle of these example plans has 3 expected safe Democratic seats, one safe expected Republican seat, and two expected competitive Republican-leaning seats.
+  
 ```{r}
 distrs <- st_as_sf(as_tibble(map)) %>%
   mutate(district = plans$sb %>% filter(draw == 259) %>% get_plans_matrix()) %>%
