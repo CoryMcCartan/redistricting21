@@ -1,0 +1,114 @@
+---
+title: "Oregon: Two Plans, Two Gerrymanders?"
+description: |
+    The Oregon State Legislature House Interim Committee On Redistricting released two draft plans for consideration for their 6 Congressionial Districts for 2022-2030.
+author:
+  - name: Cory McCartan
+    affiliation: Department of Statistics, Harvard University
+    url: https://corymccartan.github.io/
+  - name: Christopher T. Kenny
+    affiliation: Department of Government, Harvard University
+    url: https://www.christophertkenny.com/
+date: 09-03-2021
+output:
+  distill::distill_article:
+    self_contained: false
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo=FALSE, message=FALSE, warning=FALSE, dev="ragg_png")
+knitr::opts_knit$set(eval.after="fig.cap")
+
+library(here)
+devtools::load_all(here("."))
+
+analysis = run_analysis("OR", "cd", "prelim")
+map = analysis$map
+plans = analysis$results
+```
+
+<aside>
+```{r results="asis"}
+output_grades(make_grade(plans$tol_01))
+```
+</aside>
+
+On September 3, 2021, the Senate and House Interim Committees on Redistricting [released two opposing plans](https://www.oregonlegislature.gov/redistricting) as potential starting points for drawing Congressional Districts. 
+Oregon gained one seat following the 2020 Census, raising its total seats to 6 for this decade. 
+In Oregon, plans are proposed by the state legislature and signed by the governor as regular legislation. 
+Currently, both the state legislature and governor's office are controlled by Democrats.
+
+"Plan A" was released by the committees' Democrats, and "Plan B" by the Republicans.
+Since Democrats control the legislative process, Plan A, or something like it, is significantly more likely to be enacted. 
+Traditionally, however, redistricting in Oregon [has been relatively bipartisan](https://www.opb.org/article/2021/09/03/oregon-politics-redistricting-map-democratcs-republicans-debate-congressional-districts/).
+The final enacted plan may differ significantly from both Plan A and Plan B.
+
+
+```{r cd-map, layout="l-page", fig.width=12, fig.height=5, fig.cap="The preliminary congressional districting plans."}
+p1 = plot_cds(map, map$cd_a, county, "OR") + labs(title="Plan A (Democratic)")
+p2 = plot_cds(map, map$cd_b, county, "OR") + labs(title="Plan B (Republican)")
+p1 + p2
+```
+
+Oregon is dominated, demographically and politically, by the Portland metropolitan area. 
+The state went `r scales::percent(with(map, sum(ndv)/sum(ndv+nrv)))` Democratic in 2016.
+This presents a challenge for Democratic map-drawers, who need to figure out a way to spread Democratic votes from Portland to the rest of the state, while preserving communities of interest and avoiding non-compact districts.
+
+```{r maps, layout="l-page", fig.width=12, fig.height=5, fig.cap="Population density and political patterns (2016 election) in Oregon."}
+counties = st_as_sf(as_tibble(map)) %>%
+        group_by(county) %>%
+        summarize(is_coverage=TRUE)
+p1 = plot(map, ndv/(ndv+nrv)) +
+    geom_sf(data=counties, fill=NA, color="#000000AA", size=0.3) +
+    scale_fill_party_c(limits=c(0.2, 0.8), breaks=c(0.2, 0.4, 0.6, 0.8))
+p2 = plot(map, pop/area_land*2.59e+6) +
+    geom_sf(data=counties, fill=NA, color="#000000AA", size=0.3) +
+    scale_fill_wa_c(name="People / sq. mi", limits=c(1, 10000), 
+                    breaks=c(500, 2e3, 5e3, 10e3),
+                    trans="sqrt", oob=scales::squish, 
+                    labels=\(x) scales::number(x, scale=0.001, suffix="k"))
+p1 + p2
+```
+
+# Political Features of the Proposed Maps
+
+[As with all of our analyses](../../methods.html), we compare these proposed plans with a large set of simulated plans, allowing us to understand how they differ from what might be reasonably expected.
+
+```{r dem-distrs, layout="l-body-outset", fig.width=8, fig.height=4.5, fig.cap=cap}
+cap = str_glue("Democratic vote by district for the proposed plan and for ",
+               scales::number(ncol(as.matrix(subset_sampled(plans$tol_01))), big.mark=","),
+               " alternative plans. ",
+               "[Learn more about this plot](../../methods.html#district-vote-share-plots)")
+rename(plans$tol_01, dem_16=dem) %>%
+    plot_dem_distr()
+```
+
+Plan A has a relatively safe 5D--1R split, which is more than the 4D--2R split that is most common from our set of simulations (with one seat from each party being competitive).
+The least-Democratic seat (numbered 2 on the figure below) is a particularly egregious departure from the set of simulated alternatives---no sampled plan came anywhere close to it.
+Plan B has a much safer Republican seat and 3 competitive seats that in a Republican-favoring year like 2016 could go Republican, leading to a 2D--4R split.
+Unsurprisingly, each plan favors the party that drew it.
+
+# Proportionality and Representativeness
+
+All our plans are given two R.A. Plan Scores, one for proportionality---how close the seats distribution reflects the statewide vote---and one for representativeness---the odds that an average voter is represented by their preferred political party.
+The scores for Oregon are [shown above](#plans-scores).
+The graph below shows the proportionality and representativeness for all of our simulated redistricting plans, and the two proposed plans.
+
+```{r prop-repr,  fig.width=6, fig.height=3.5, fig.cap="Proportionality and representativeness for the redistricting plans."}
+x = as_tibble(plans$tol_01) %>%
+    group_by(draw) %>%
+    summarize(repr = represent[1],
+              prop = proportion[1],
+              dem = sum(dem > 0.5)) %>%
+ggplot(aes(- abs(prop), repr, color=as.factor(dem))) +
+    geom_point(size=0.6, alpha=0.5) +
+    scale_color_wa_d("diablo", name="Dem. seats",
+                     guide=guide_legend(override.aes=list(size=6, alpha=1, shape=15))) +
+    labs(x="Proportionality", y="Representativeness") +
+    theme_r21() +
+    theme(axis.text=element_blank(),
+          axis.ticks=element_blank())
+```
+
+# A Compromise Plan

@@ -18,7 +18,18 @@ Often, we will also ensure that district boundaries follow county lines as much
 as possible.
 
 The algorithm works by starting off with a blank map and drawing new districts
-one at a time, across many maps in parallel. After each round of drawing districts,
+one at a time, across many maps in parallel. 
+After each round of drawing districts, the set of partially-drawn redistricting plans is shuffled around, with some plans dropping out and other plans being copied, according to a mathematical formula.
+This shuffling and discarding and copying ensures that the simulated redistricting plans are truly representative and do not contain any unknown or hidden biases.
+
+### District Vote Share Plots
+
+For most plans, we'll spin up a graph like the ones below, from Colorado's preliminary districts.
+Each dot represents a district in a possible plan, with blue dots representing Democratic-controlled districts and red dots Republican-controlled districts, and the districts are arranged by how Democratic they are. 
+The black lines show the estimated election results under the newly-proposed plan. 
+When these lines are lower than their corresponding set of points, that indicates that the proposed district has fewer Democratic voters than would be expected under an average fair and neutral map.
+
+![](posts/2021-06-25-colorado-preliminary-congressional-districts/colorado-preliminary-congressional-districts_files/figure-html5/dem-distrs-1.png)
 
 # Our Scoring System
 

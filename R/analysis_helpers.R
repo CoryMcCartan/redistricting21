@@ -55,8 +55,8 @@ output_grades = function(gr) {
 </div>
 </div>')
     }) %>%
-        c('<a href="/redistricting/site/docs/methods.html#our-scoring-system">
-          <h3 style="white-space: nowrap;">R.A. Plan Scores</h3></a>', .) %>%
+        c('<a href="../../methods.html#our-scoring-system">
+          <h3 style="white-space: nowrap;" id="plans-scores">R.A. Plan Scores</h3></a>', .) %>%
         cat(sep="\n")
 }
 plot_mini_scores = function(pl) {
@@ -99,7 +99,10 @@ plot_dem_distr = function(pl, ...) {
 #' @examples
 #' #TODO
 plot_cds = function(map, pl, county, abbr, city=FALSE) {
-    plan = redist:::color_graph(get_adj(map), as.integer(pl))
+    if (n_distinct(pl) > 6)
+        plan = redist:::color_graph(get_adj(map), as.integer(pl))
+    else
+        plan = pl
     places = suppressMessages(tigris::places(abbr, cb=TRUE))
     if (city) {
         cities = arrange(places, desc(ALAND)) %>%
@@ -115,17 +118,17 @@ plot_cds = function(map, pl, county, abbr, city=FALSE) {
         group_by({{ county }}) %>%
         summarize(is_coverage=TRUE)
     map %>%
-        mutate(.plan = plan,
-               .distr = pl) %>%
+        mutate(.plan = as.factor(plan),
+               .distr = as.integer(pl)) %>%
         as_tibble() %>%
         st_as_sf() %>%
         group_by(.distr) %>%
         summarize(.plan = .plan[1], is_coverage=TRUE) %>%
     ggplot(aes(fill=.plan)) +
         geom_sf(size=0.0) +
-        geom_sf(data=places, inherit.aes=FALSE, fill="#0000002A", color=NA) +
-        geom_sf(data=counties, inherit.aes=FALSE, fill=NA, size=0.25, color="#ffffff1D") +
+        geom_sf(data=places, inherit.aes=FALSE, fill="#00000033", color=NA) +
         geom_sf(fill=NA, size=0.4, color="black") +
+        geom_sf(data=counties, inherit.aes=FALSE, fill=NA, size=0.5, color="#ffffff3A") +
         {if (city) geom_text_repel(aes(label=str_to_upper(NAME), geometry=geometry),
                         data=cities, color="#ffffff88", fontface="bold",
                         size=3.5, inherit.aes=FALSE, stat="sf_coordinates")} +
