@@ -185,6 +185,24 @@ district_group = function(plans, group) {
     m_prec
 }
 
+plot_prop_repr = function(pl) {
+    x = pl %>%
+        group_by(draw) %>%
+        summarize(repr = represent[1],
+                  prop = proportion[1],
+                  dem = sum(dem > 0.5))
+    ggplot(subset_sampled(x), aes(- abs(prop), repr, color=as.factor(dem))) +
+        geom_point(size=0.6, alpha=0.4) +
+        geom_point(aes(shape=draw), color="white", size=5, data=subset_ref(x)) +
+        geom_point(aes(shape=draw), color="black", size=3.5, data=subset_ref(x)) +
+        scale_color_wa_d("diablo", name="Dem. seats",
+                         guide=guide_legend(override.aes=list(size=6, alpha=1, shape=15))) +
+        labs(x="Proportionality", y="Representativeness", shape=NULL) +
+        theme_r21() +
+        theme(axis.text=element_blank(),
+              axis.ticks=element_blank())
+}
+
 eff_gap_calc = function(pl, shifts=seq(-0.1, 0.1, by=0.01)) {
     if (!"sim" %in% names(pl)) pl$sim = NA_character_
     if (!"chain" %in% names(pl)) pl$chain = NA_integer_

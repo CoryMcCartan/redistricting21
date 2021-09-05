@@ -95,20 +95,35 @@ All our plans are given two R.A. Plan Scores, one for proportionality---how clos
 The scores for Oregon are [shown above](#plans-scores).
 The graph below shows the proportionality and representativeness for all of our simulated redistricting plans, and the two proposed plans.
 
-```{r prop-repr,  fig.width=6, fig.height=3.5, fig.cap="Proportionality and representativeness for the redistricting plans."}
-x = as_tibble(plans$tol_01) %>%
-    group_by(draw) %>%
-    summarize(repr = represent[1],
-              prop = proportion[1],
-              dem = sum(dem > 0.5)) %>%
-ggplot(aes(- abs(prop), repr, color=as.factor(dem))) +
-    geom_point(size=0.6, alpha=0.5) +
-    scale_color_wa_d("diablo", name="Dem. seats",
-                     guide=guide_legend(override.aes=list(size=6, alpha=1, shape=15))) +
-    labs(x="Proportionality", y="Representativeness") +
-    theme_r21() +
-    theme(axis.text=element_blank(),
-          axis.ticks=element_blank())
+```{r prop-repr, fig.width=7, fig.height=4, fig.cap="Proportionality and representativeness for the redistricting plans. [Learn more about these measures](../../methods.html#our-scoring-system)"}
+plot_prop_repr(plans$tol_01)
+```
+
+The GOP Plan B is slightly less representative than the Democratic Plan A, but
+is vastly more proportional.
+
+What would a good plan look like according to these two measures? 
+The map below is the simulated redistricting plan which scored the combined best on proportionality and representativeness. 
+It has two safe Republican seats, three safe Democratic seats, and one competitive seat.
+
+```{r best, fig.width=7, fig.height=4.5, fig.cap="The sampled plan with the best combination of proportionality and representativeness, with Democratic vote shares labelled."}
+best = plans$tol_01 %>%
+    mutate(score = scale(-abs(proportion))[,1] + scale(represent)[,1]) %>%
+    arrange(desc(score)) 
+best = plans$tol_01 %>%
+    filter(draw == as.character(best$draw[1]))
+distrs = st_as_sf(as_tibble(map)) %>%
+    mutate(district = as.integer(last_plan(best))) %>%
+    group_by(district) %>%
+    summarize() %>%
+    left_join(select(best, district, dem), by="district")
+plot_cds(map, last_plan(best), county, "OR") +
+    geom_sf_label(aes(label=scales::percent(dem, 1)), data=distrs, fontface="bold",
+                  label.padding=unit(0.15, "lines"), label.r=unit(0.05, "lines"),
+                  fill="#ffffffaa", label.size=0, inherit.aes=F)
 ```
 
 # A Compromise Plan
+
+Unfortunately, this "best plan" doesn't look much like either Plan A or Plan B.
+What might a compromise plan look like that is somewhere in between those two?
