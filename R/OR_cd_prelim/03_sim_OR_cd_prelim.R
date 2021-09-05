@@ -25,18 +25,15 @@ simulate = function(map) {
                                 init_plan = map$cd_a,
                                 max_bursts = 2e4, stop_at = 1)
 
-
     steps <- ((1:7)/8 *
-                  (1 - min(plans$sb$score, na.rm = TRUE)) +
-                  min(plans$sb$score, na.rm = TRUE))
+                  (1 - min(plans2$score, na.rm = TRUE)) +
+                  min(plans2$score, na.rm = TRUE))
     sub <- unlist(lapply(seq_len(length(steps)),
-                         \(x) as.integer(plans$sb$draw[which.min(abs(plans$sb$score - steps[x]))])))
-    sb_sub <- plans$sb %>% filter(draw %in% sub)
-    plans$sb <- sb_sub
+                         \(x) as.integer(plans2$draw[which.min(abs(plans2$score - steps[x]))])))
+    sb_sub <- plans2 %>% filter(draw %in% sub)
 
     plans = list(
-        tol_01 = plans1,
-        sb = plans2
+       tol_01 = plans1
     )
 
     ndists = attr(map, "ndists")
@@ -58,15 +55,22 @@ simulate = function(map) {
                    hisp = group_frac(map, pop_hisp),
                    minority = group_frac(map, pop - pop_white))
 
-        m_dem = ker(district_group(p, dem))
+            m_dem = ker(district_group(p, dem))
 
-        p %>%
-            mutate(represent = rep(as.numeric(dvote %*% m_dem + rvote %*% (1-m_dem)) /
-                                       sum(dvote + rvote), each=ndists)) %>%
-            group_by(draw) %>%
-            mutate(proportion = statewide - sum(ker(dem)) / ndists) %>%
-            ungroup()
+            p %>%
+                mutate(represent = rep(as.numeric(dvote %*% m_dem + rvote %*% (1-m_dem)) /
+                                           sum(dvote + rvote), each=ndists)) %>%
+                group_by(draw) %>%
+                mutate(proportion = statewide - sum(ker(dem)) / ndists) %>%
+                ungroup()
+
     })
+
+    plans$sb <- sb_sub %>%
+        subset_sampled() %>%
+        add_reference(map$cd_b, "Plan B") %>%
+        add_reference(map$cd_a, "Plan A") %>%
+        mutate(dem = group_frac(map, ndv, ndv+nrv))
 
     # pl = do.call('rbind', plans)
     path = "data/OR/OR_cd_prelim_results.rds"

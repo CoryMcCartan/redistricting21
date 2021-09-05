@@ -130,11 +130,30 @@ How might we locate a compromise plan between these two? The two proposed plans 
 Below, we present 7 intermediate plans, which are approximately evenly spaced in information space between Plan A and Plan B.
 ```{r gold-plans}
 p <- vector(mode = 'list', length = 9)
-p[[1]] <- plot_cds(map, map$cd_a, county, 'OR') + labs(title = 'Plan A (Democratic)')
+sb <- plans$sb %>% subset_sampled() %>% get_plans_matrix()
+mat <- cbind(map$cd_a, sb, map$cd_b)
+mat <- match_numbers(redist_plans(mat, map = map, algorithm = ''), map$cd_a, force = TRUE)
+mat <- get_plans_matrix(mat)
+p[[1]] <- plot_cds(map, mat[, 1], county, 'OR') + labs(title = 'Plan A (D)')
 for (i in 2:8) {
-  p[[i]] <- plot_cds(map, get_plans_matrix(plans$sb)[, i - 1], county, 'OR') + labs(title = )
+  p[[i]] <- plot_cds(map, mat[, i], county, 'OR')
 }
-p[[9]] <- plot_cds(map, map$cd_b, county, 'OR') + labs(title = 'Plan B (Republican)')
+p[[9]] <- plot_cds(map, mat[, 9], county, 'OR') + labs(title = 'Plan B (R)')
+
+wrap_plots(p)
 ```
 
-Using the middle plan, we can compare it to
+The middle of these example plans has 3 expected safe Democratic seats, one safe expected Republican seat, and two expected competitive Republican-leaning seats.
+```{r}
+distrs <- st_as_sf(as_tibble(map)) %>%
+  mutate(district = plans$sb %>% filter(draw == 259) %>% get_plans_matrix()) %>%
+  group_by(district) %>%
+  summarize() %>%
+  left_join(select(plans$sb %>% filter(draw == 259), district, dem), by = 'district')
+plot_cds(map, mat[, 5], county, 'OR') +
+  geom_sf_label(aes(label = scales::percent(dem, 1)),
+    data = distrs, fontface = 'bold',
+    label.padding=unit(0.15, "lines"), label.r=unit(0.05, "lines"),
+    fill = '#ffffffaa', label.size = 0, inherit.aes = FALSE
+  )
+```
