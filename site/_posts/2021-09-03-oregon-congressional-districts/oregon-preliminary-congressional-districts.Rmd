@@ -34,13 +34,13 @@ output_grades(make_grade(plans$tol_01))
 ```
 </aside>
 
-On September 3, 2021, the Senate and House Interim Committees on Redistricting [released two opposing plans](https://www.oregonlegislature.gov/redistricting) as potential starting points for drawing Congressional Districts. 
-Oregon gained one seat following the 2020 Census, raising its total seats to 6 for this decade. 
-In Oregon, plans are proposed by the state legislature and signed by the governor as regular legislation. 
+On September 3, 2021, the Senate and House Interim Committees on Redistricting [released two opposing plans](https://www.oregonlegislature.gov/redistricting) as potential starting points for drawing Congressional Districts.
+Oregon gained one seat following the 2020 Census, raising its total seats to 6 for this decade.
+In Oregon, plans are proposed by the state legislature and signed by the governor as regular legislation.
 Currently, both the state legislature and governor's office are controlled by Democrats.
 
 "Plan A" was released by the committees' Democrats, and "Plan B" by the Republicans.
-Since Democrats control the legislative process, Plan A, or something like it, is significantly more likely to be enacted. 
+Since Democrats control the legislative process, Plan A, or something like it, is significantly more likely to be enacted.
 Traditionally, however, redistricting in Oregon [has been relatively bipartisan](https://www.opb.org/article/2021/09/03/oregon-politics-redistricting-map-democratcs-republicans-debate-congressional-districts/).
 The final enacted plan may differ significantly from both Plan A and Plan B.
 
@@ -51,7 +51,7 @@ p2 = plot_cds(map, map$cd_b, county, "OR") + labs(title="Plan B (Republican)")
 p1 + p2
 ```
 
-Oregon is dominated, demographically and politically, by the Portland metropolitan area. 
+Oregon is dominated, demographically and politically, by the Portland metropolitan area.
 The state went `r scales::percent(with(map, sum(ndv)/sum(ndv+nrv)))` Democratic in 2016.
 This presents a challenge for Democratic map-drawers, who need to figure out a way to spread Democratic votes from Portland to the rest of the state, while preserving communities of interest and avoiding non-compact districts.
 
@@ -64,9 +64,9 @@ p1 = plot(map, ndv/(ndv+nrv)) +
     scale_fill_party_c(limits=c(0.2, 0.8), breaks=c(0.2, 0.4, 0.6, 0.8))
 p2 = plot(map, pop/area_land*2.59e+6) +
     geom_sf(data=counties, fill=NA, color="#000000AA", size=0.3) +
-    scale_fill_wa_c(name="People / sq. mi", limits=c(1, 10000), 
+    scale_fill_wa_c(name="People / sq. mi", limits=c(1, 10000),
                     breaks=c(500, 2e3, 5e3, 10e3),
-                    trans="sqrt", oob=scales::squish, 
+                    trans="sqrt", oob=scales::squish,
                     labels=\(x) scales::number(x, scale=0.001, suffix="k"))
 p1 + p2
 ```
@@ -102,14 +102,14 @@ plot_prop_repr(plans$tol_01)
 The GOP Plan B is slightly less representative than the Democratic Plan A, but
 is vastly more proportional.
 
-What would a good plan look like according to these two measures? 
-The map below is the simulated redistricting plan which scored the combined best on proportionality and representativeness. 
+What would a good plan look like according to these two measures?
+The map below is the simulated redistricting plan which scored the combined best on proportionality and representativeness.
 It has two safe Republican seats, three safe Democratic seats, and one competitive seat.
 
 ```{r best, fig.width=7, fig.height=4.5, fig.cap="The sampled plan with the best combination of proportionality and representativeness, with Democratic vote shares labelled."}
 best = plans$tol_01 %>%
     mutate(score = scale(-abs(proportion))[,1] + scale(represent)[,1]) %>%
-    arrange(desc(score)) 
+    arrange(desc(score))
 best = plans$tol_01 %>%
     filter(draw == as.character(best$draw[1]))
 distrs = st_as_sf(as_tibble(map)) %>%
@@ -123,7 +123,18 @@ plot_cds(map, last_plan(best), county, "OR") +
                   fill="#ffffffaa", label.size=0, inherit.aes=F)
 ```
 
-# A Compromise Plan
+# Locating Goldilocks
 
-Unfortunately, this "best plan" doesn't look much like either Plan A or Plan B.
-What might a compromise plan look like that is somewhere in between those two?
+How might we locate a compromise plan between these two? The two proposed plans are clearly very different. Quantifying the differences can be difficult for redistricting plans. We opt to use a variation of information metric. It is scaled so that a score of 0 indicates that the maps are completely different while a score of 1 indicates that the maps are identical. With those scores, we utilize a simple, but effective optimization method known as [short bursts](https://arxiv.org/pdf/2011.02288.pdf) to traverse the information space between plans.
+
+Below, we present 7 intermediate plans, which are approximately evenly spaced in information space between Plan A and Plan B.
+```{r gold-plans}
+p <- vector(mode = 'list', length = 9)
+p[[1]] <- plot_cds(map, map$cd_a, county, 'OR') + labs(title = 'Plan A (Democratic)')
+for (i in 2:8) {
+  p[[i]] <- plot_cds(map, get_plans_matrix(plans$sb)[, i - 1], county, 'OR') + labs(title = )
+}
+p[[9]] <- plot_cds(map, map$cd_b, county, 'OR') + labs(title = 'Plan B (Republican)')
+```
+
+Using the middle plan, we can compare it to

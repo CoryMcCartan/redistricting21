@@ -1,6 +1,8 @@
 # Simulate plans for `OR_cd_prelim`
 # © September 2021
 
+shp_path = 'data/OR/OR_cd_prelim_vtd_20.rds'
+
 # Set up the redistricting problem, including filtering, cores, and population tolerance
 make_map = function(shp_path) {
     or_shp = read_rds(here(shp_path)) %>%
@@ -22,6 +24,15 @@ simulate = function(map) {
     plans2 <- redist_shortburst(map, scorer_status_quo(map, map$cd_b),
                                 init_plan = map$cd_a,
                                 max_bursts = 2e4, stop_at = 1)
+
+
+    steps <- ((1:7)/8 *
+                  (1 - min(plans$sb$score, na.rm = TRUE)) +
+                  min(plans$sb$score, na.rm = TRUE))
+    sub <- unlist(lapply(seq_len(length(steps)),
+                         \(x) as.integer(plans$sb$draw[which.min(abs(plans$sb$score - steps[x]))])))
+    sb_sub <- plans$sb %>% filter(draw %in% sub)
+    plans$sb <- sb_sub
 
     plans = list(
         tol_01 = plans1,
@@ -51,18 +62,11 @@ simulate = function(map) {
 
         p %>%
             mutate(represent = rep(as.numeric(dvote %*% m_dem + rvote %*% (1-m_dem)) /
-                       sum(dvote + rvote), each=ndists)) %>%
+                                       sum(dvote + rvote), each=ndists)) %>%
             group_by(draw) %>%
             mutate(proportion = statewide - sum(ker(dem)) / ndists) %>%
             ungroup()
     })
-
-    steps <- ((1:7)/8 *
-        (1 - min(plans$sb$score, na.rm = TRUE)) +
-        min(plans$sb$score, na.rm = TRUE))
-    sub <- unlist(lapply(seq_len(length(steps)),
-                         \(x) as.integer(plans$sb$draw[which.min(abs(plans$sb$score - steps[x]))])))
-    plans$sb <- plans$sb %>% filter(draw %in% sub)
 
     # pl = do.call('rbind', plans)
     path = "data/OR/OR_cd_prelim_results.rds"
@@ -72,7 +76,7 @@ simulate = function(map) {
 }
 
 
-if (F) {
+if (FALSE) {
     rename(pl, dem_16=dem) %>%
         plot_dem_distr()
     m_dem = district_group(pl, dem)
