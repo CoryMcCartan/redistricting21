@@ -1,22 +1,22 @@
-# Simulate plans for ```SLUG```
-# ``COPYRIGHT``
+# Simulate plans for `CO_cd_staff`
+# © September 2021
 
-shp_path = "data/``STATE``/``SLUG``_vtd_20.rds"
+shp_path = "data/CO/CO_cd_staff_vtd_20.rds"
 
 # Set up the redistricting problem, including filtering, cores, and population tolerance
 make_map = function(shp_path) {
-    ``state``_shp = read_rds(here(shp_path))
-    ``state``_map = redist_map(``state``_shp, pop_tol=0.01,
-                               existing_plan=cd, adj=``state``_shp$adj)
+    co_shp = read_rds(here(shp_path))
+    co_map = redist_map(co_shp, pop_tol=0.01,
+                        existing_plan=cd, adj=co_shp$adj)
 
-    ``state``_map
+    co_map
 }
 
 # Simulate redistricting plans
 # Analyze and summarize simulated plans
 # Returns a simulation-free summary frame with all the necessary data for visualization
 simulate = function(map) {
-    plans1 = redist_smc(map, nsims=10e3, counties=county)
+    plans1 = redist_smc(map, nsims=10e3, counties=county, ref_name="staff")
 
     plans = list(
         tol_01 = plans1
@@ -24,13 +24,13 @@ simulate = function(map) {
 
     ndists = attr(map, "ndists")
     dvote = map$ndv
-    rvote = map$ndv
+    rvote = map$nrv
     statewide = sum(dvote) / (sum(dvote) + sum(rvote))
     ker = function(x) pt((x-0.5)/0.035136, df=22)
 
     plans = purrr::imap(plans, function(p, name) {
         p = p %>%
-            #pullback() %>%
+            add_reference(map$cd_prelim, "prelim") %>%
             mutate(dev =  plan_parity(map),
                    comp = distr_compactness(map),
                    county_splits = county_splits(map, county),
@@ -49,7 +49,7 @@ simulate = function(map) {
             ungroup()
     })
 
-    path = "data/``STATE``/``SLUG``_results.rds"
+    path = "data/CO/CO_cd_staff_results.rds"
     write_rds(plans, here(path), compress="xz")
 
     plans

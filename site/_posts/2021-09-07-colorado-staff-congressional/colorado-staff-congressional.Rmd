@@ -1,0 +1,104 @@
+---
+title: "Colorado Update: The Staff Plan is Worse"
+description: |
+    Staff for the Colorado Independent Congressional Redistricting Commission have released an updated congressional map.
+author:
+  - name: Cory McCartan
+    affiliation: Department of Statistics, Harvard University
+    url: https://corymccartan.github.io/
+  - name: Christopher T. Kenny
+    affiliation: Department of Government, Harvard University
+    url: https://www.christophertkenny.com/
+date: 09-07-2021
+output:
+  distill::distill_article:
+    self_contained: false
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo=FALSE, message=FALSE, warning=FALSE, dev="ragg_png")
+knitr::opts_knit$set(eval.after="fig.cap")
+
+library(here)
+devtools::load_all(here("."))
+
+analysis = run_analysis("CO", "cd", "staff")
+map = analysis$map
+plans = analysis$results
+```
+
+<aside>
+```{r results="asis"}
+make_grade(plans$tol_01) %>%
+    mutate(plan = c("Preliminary", "Staff")) %>%
+    output_grades()
+```
+</aside>
+
+This post follows up on a [previous analysis](../2021-06-25-colorado-preliminary-congressional-districts/) of Colorado's congressional redistricting plan.
+Since then, staff for the Colorado Independent Congressional Redistricting Commission have released an updated congressional map.
+This new map has already [been criticized](https://twitter.com/Redistrict/status/1435274464934211584) for its partisan balance and boundary lines.
+
+```{r, results = 'hide'}
+p1 = plot_cds(map, map$cd, county, "CO") + labs(title="Staff Plan")
+p2 = plot_cds(map, map$cd_prelim, county, "CO") + labs(title="Preliminary Plan")
+```
+
+```{r cd-map, fig.width=9, fig.height=4, fig.cap="The preliminary and staff congressional districting plans."}
+p1 + p2
+```
+
+# Political Features of Both Maps
+
+[As with all of our analyses](../../methods.html), we compare these proposed plans with a large set of simulated plans, allowing us to understand how they differ from what might be reasonably expected.
+
+```{r dem-distrs, layout="l-body-outset", fig.width=8, fig.height=4.5, fig.cap=cap}
+cap = str_glue("Democratic vote by district for the staff and preliminary plans and for ",
+               scales::number(ncol(as.matrix(subset_sampled(plans$tol_01))), big.mark=","),
+               " alternative plans. ",
+               "[Learn more about this plot](../../methods.html#district-vote-share-plots)")
+rename(plans$tol_01, dem_16=dem) %>%
+    plot_dem_distr() +
+    labs(title="Average election 2016–2020")
+```
+
+Compared to the preliminary plan, the staff plan makes 1 Republican district and 1 Democratic district more competitive.
+The nearly-evenly-split district (numbered 4 above) remains highly competitive.
+
+
+# Proportionality and Representativeness
+
+All our plans are given two R.A. Plan Scores, one for proportionality---how close the seats distribution reflects the statewide vote---and one for representativeness---the odds that an average voter is represented by their preferred political party.
+The scores for Colorado are [shown above](#plans-scores).
+The graph below shows the proportionality and representativeness for all of our simulated redistricting plans, and the two proposed plans.
+
+```{r prop-repr, fig.width=7, fig.height=4, fig.cap="Proportionality and representativeness for the redistricting plans. [Learn more about these measures](../../methods.html#our-scoring-system)"}
+plot_prop_repr(plans$tol_01)
+```
+
+Neither plan is very proportional, giving Republicans slightly more seats, on average, than would be otherwise expected.
+But the preliminary plan was more representative, with fewer competitive districts.
+This meant that more voters were expected to be represented by someone of their party.
+
+What would a good plan look like according to these two measures?
+The map below is the simulated redistricting plan which scored the combined best on proportionality and representativeness.
+It has two safe Republican seats, one lean-Republican seat, four safe Democratic seats, and one competitive seat.
+
+```{r best, fig.width=7, fig.height=4.5, fig.cap="The sampled plan with the best combination of proportionality and representativeness, with Democratic vote shares labelled."}
+best = plans$tol_01 %>%
+    filter(abs(proportion) < 1e-4) %>%
+    #mutate(score = scale(-abs(proportion))[,1] + scale(represent)[,1]) %>%
+    arrange(desc(represent))
+best = plans$tol_01 %>%
+    filter(draw == as.character(best$draw[1]))
+distrs = st_as_sf(as_tibble(map)) %>%
+    mutate(district = as.integer(last_plan(best))) %>%
+    group_by(district) %>%
+    summarize() %>%
+    left_join(select(best, district, dem), by="district")
+plot_cds(map, last_plan(best), county, "CO") +
+    geom_sf_label(aes(label=scales::percent(dem, 1)), data=distrs, fontface="bold",
+                  label.padding=unit(0.15, "lines"), label.r=unit(0.05, "lines"),
+                  fill="#ffffffaa", label.size=0, inherit.aes=F)
+```
