@@ -56,7 +56,8 @@ output_grades = function(gr) {
 </div>')
     }) %>%
         c('<a href="../../methods.html#our-scoring-system">
-          <h3 style="white-space: nowrap;" id="plans-scores">R.A. Plan Scores</h3></a>', .) %>%
+          <h3 style="white-space: nowrap;" id="plans-scores">R.A. Plan Scores</h3></a>', .,
+          '<br /><a style="margin-top: 0.5em" href="../../methods.html#our-scoring-system">Learn more about these grades</a>') %>%
         cat(sep="\n")
 }
 plot_mini_scores = function(pl) {
