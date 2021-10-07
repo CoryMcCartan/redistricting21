@@ -1,0 +1,174 @@
+---
+title: "Washington: The Republican Plans Surprise"
+description: |
+    Partisan representatives on the Washington State Redistricting Commission have released four proposed congressional maps.
+author:
+  - name: Cory McCartan
+    affiliation: Department of Statistics, Harvard University
+    url: https://corymccartan.github.io/
+date: 10-07-2021
+output:
+  distill::distill_article:
+    self_contained: false
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo=FALSE, message=FALSE, warning=FALSE, dev="ragg_png")
+knitr::opts_knit$set(eval.after="fig.cap")
+
+library(here)
+devtools::load_all(here("."))
+
+analysis = run_analysis("WA", "cd", "prelim")
+map = analysis$map
+plans = analysis$results
+
+wa_places = suppressMessages(tigris::places("WA", cb=TRUE))
+wa_counties = map %>%
+        as_tibble() %>%
+        st_as_sf() %>%
+        group_by(county) %>%
+        summarize()
+water_counties = c("Clallam", "Jefferson", "Island", "King", "San Juan", "Kitsap",
+                   "Whatcom", "Skagit", "Snohomish", "Pierce", "Thurston", 
+                   "Mason", "Grays Harbor", "Pacific")
+wa_st = map %>%
+        as_tibble() %>%
+        st_as_sf() %>%
+        summarize()
+wa_water = map_dfr(water_counties, function(cty) {
+    suppressMessages(tigris::area_water("WA", county=cty)) %>%
+        filter(MTFCC %in% c("H2051", "H2053") | log(AWATER) > 16) 
+})
+plot_cds_wa = function(pl) {
+    plan = redist:::color_graph(get_adj(map), as.integer(pl))
+
+    map %>%
+        mutate(.plan = as.factor(plan),
+               .distr = as.integer(pl)) %>%
+        as_tibble() %>%
+        st_as_sf() %>%
+        group_by(.distr) %>%
+        summarize(.plan = .plan[1]) %>%
+    ggplot(aes(fill=.plan)) +
+        geom_sf(size=0.0) +
+        geom_sf(data=wa_places, inherit.aes=FALSE, fill="#00000033", color=NA) +
+        geom_sf(fill=NA, size=0.4, color="black") +
+        geom_sf(data=wa_counties, inherit.aes=FALSE, fill=NA, size=0.5, color="#ffffff3A") +
+        geom_sf(data=wa_water, inherit.aes=FALSE, fill="white", size=0.0, color="transparent") +
+        geom_sf(data=wa_st, inherit.aes=FALSE, fill=NA, size=0.8, color="white") +
+        scale_fill_manual(values=PAL, guide="none") +
+        theme_void()
+}
+```
+
+On September 28, 2021, the Washington State Redistricting Commission [released four plans](https://www.redistricting.wa.gov/proposed-congressional-maps) as starting points for drawing congressional districts.
+Washington neither gained or lost a seat following the 2020 Census, maintaining its apportionment of 10 seats for this decade.
+
+<aside>
+```{r results="asis"}
+make_grade(plans) %>%
+    mutate(plan = c("Senate Republican", "Senate Democratic", "House Republican", "House Democratic")) %>%
+    output_grades()
+```
+</aside>
+
+In Washington, redistricting is done by a five-member non-politician commission.
+Washington was one of the first states to adopt a commission model for redistricting, in 1983, after [decades of court battles](https://washingtonstatewire.com/history-of-redistricting-in-washington-state/).
+The commission consists of appointees from each of the majority and minority parties in the state House and Senate, along with one non-voting member.
+The commissioners must work out a redistricting plan, which may be amended by the legislature by a two-thirds vote.
+Democrats control the state legislature, but do not have a supermajority, making such amendments unlikely.
+
+![2010 Congressional Map](https://assets-global.website-files.com/6070f12f4cba9bd0eef4fe43/60a73763f3cff4131a583388_Washington-state-congressional-district-map-2.png)
+
+The four proposed congressional districting plans are shown below.
+The two Democratic plans generally follow the contours of the 2010 map, while
+the Republican plans make more significant changes, especially to District 8 (Kim Schrier), 
+which currently runs from the outer-ring Eastside suburbs across the Cascades.
+
+```{r, results = 'hide'}
+p1 = plot_cds_wa(map$dem_house) + labs(title="House Democratic")
+p2 = plot_cds_wa(map$rep_house) + labs(title="House Republican")
+p3 = plot_cds_wa(map$dem_senate) + labs(title="Senate Democratic")
+p4 = plot_cds_wa(map$rep_senate) + labs(title="Senate Republican")
+```
+
+```{r cd-map, layout="l-body-outset", fig.width=10, fig.height=8, fig.cap="The four congressional districting plans."}
+p1 + p2 + p3 + p4
+```
+
+# Political Features of Both Maps
+
+[As with all of our analyses](../../methods.html), we compare these proposed plans with a large set of simulated plans, allowing us to understand how they differ from what might be reasonably expected.
+
+These simulated plans follow Washington's requirements of contiguity and compactness, and generally follow county lines.
+However, they do not take into account natural boundaries such as Puget Sound or the Cascade mountains, nor city or town boundaries.
+Additionally, they do not attempt to draw districts which look like the current districts.
+Staying closer to existing districts, and following geographic boundaries, may lead to qualitatively different districts with different partisan implications.
+
+```{r dem-distrs, layout="l-body-outset", fig.width=8, fig.height=4.5, fig.cap=cap}
+cap = str_glue("Democratic vote by district for the four plans and for ",
+               scales::number(ncol(as.matrix(subset_sampled(plans))), big.mark=","),
+               " alternative plans. ",
+               "[Learn more about this plot](../../methods.html#district-vote-share-plots)")
+rename(plans, dem_16=dem) %>%
+    plot_dem_distr() +
+    scale_linetype_manual(values=1:4) +
+    theme(legend.key.width=unit(2, "cm")) +
+    labs(title="Average election 2016–2018")
+```
+
+The two Democratic plans create 7 safe Democratic seats, while the two
+Republican plans allow for only 6. The Republican House plan creates an even
+5--5 split.
+
+In comparison, the simulated plans align more with the Democratic plans, giving 
+them 7 seats, on average, though with the 7th seat a bit more competitive.
+
+
+# Proportionality and Representativeness
+
+All our plans are given two R.A. Plan Scores, one for proportionality---how close the seats distribution reflects the statewide vote---and one for representativeness---the odds that an average voter is represented by their preferred political party.
+The scores for Colorado are [shown above](#plans-scores).
+The graph below shows the proportionality and representativeness for all of our simulated redistricting plans, and the two proposed plans.
+
+```{r prop-repr, fig.width=7, fig.height=4, fig.cap="Proportionality and representativeness for the redistricting plans. [Learn more about these measures](../../methods.html#our-scoring-system)"}
+plot_prop_repr(plans)
+```
+
+The Republican plans are quite proportional--giving them seats closer to their statewide vote share, on average, than would be otherwise expected.
+The Republican plans are also a bit more representative, though all four plans score well on this measure.
+This means the average voter is slightly more likely to be represented by a member of their preferred party under the Republican plans than under the Democratic plans.
+
+What would a good plan look like according to these two measures?
+The Republican House plan actually performs quite well, but has already [been criticized](https://www.seattletimes.com/seattle-news/politics/redistricting-democrats-and-republicans-release-competing-washington-legislative-maps/)
+as a gerrymander and is unlikely to be enacted.
+The two maps below are the simulated redistricting plan which scored the combined best on proportionality and representativeness.
+It has two safe Republican seats, one lean-Republican seat, four safe Democratic seats, and one competitive seat.
+
+```{r best, fig.width=7, fig.height=9, fig.cap="The sampled plans with the best combination of proportionality and representativeness, with Democratic vote shares labelled."}
+best = plans %>%
+    subset_sampled() %>%
+    filter(proportion > -0.125, represent > 0.6) %>%
+    arrange(desc(represent))
+distrs1 = st_as_sf(as_tibble(map)) %>%
+    mutate(district = as.integer(as.matrix(best)[, 2])) %>%
+    group_by(district) %>%
+    summarize() %>%
+    left_join(select(best, district, dem)[11:20,], by="district")
+distrs2 = st_as_sf(as_tibble(map)) %>%
+    mutate(district = as.integer(as.matrix(best)[, 3])) %>%
+    group_by(district) %>%
+    summarize() %>%
+    left_join(select(best, district, dem)[21:30,], by="district")
+p1 = plot_cds_wa(as.matrix(best)[, 2]) +
+    geom_sf_label(aes(label=scales::percent(dem, 1)), data=distrs1, fontface="bold",
+                  label.padding=unit(0.15, "lines"), label.r=unit(0.05, "lines"),
+                  fill="#ffffffaa", label.size=0, inherit.aes=F)
+p2 = plot_cds_wa(as.matrix(best)[, 3]) +
+    geom_sf_label(aes(label=scales::percent(dem, 1)), data=distrs2, fontface="bold",
+                  label.padding=unit(0.15, "lines"), label.r=unit(0.05, "lines"),
+                  fill="#ffffffaa", label.size=0, inherit.aes=F)
+p1 + p2 + plot_layout(ncol=1)
+```

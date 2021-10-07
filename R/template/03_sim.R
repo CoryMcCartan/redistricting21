@@ -24,7 +24,7 @@ simulate = function(map) {
 
     ndists = attr(map, "ndists")
     dvote = map$ndv
-    rvote = map$ndv
+    rvote = map$nrv
     statewide = sum(dvote) / (sum(dvote) + sum(rvote))
     ker = function(x) pt((x-0.5)/0.035136, df=22)
 

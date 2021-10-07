@@ -99,7 +99,7 @@ plot_dem_distr = function(pl, ...) {
 #'
 #' @examples
 #' #TODO
-plot_cds = function(map, pl, county, abbr, city=FALSE) {
+plot_cds = function(map, pl, county, abbr, city=FALSE, coverage=TRUE) {
     if (n_distinct(pl) > 6)
         plan = redist:::color_graph(get_adj(map), as.integer(pl))
     else
@@ -117,14 +117,14 @@ plot_cds = function(map, pl, county, abbr, city=FALSE) {
         as_tibble() %>%
         st_as_sf() %>%
         group_by({{ county }}) %>%
-        summarize(is_coverage=TRUE)
+        summarize(is_coverage=coverage)
     map %>%
         mutate(.plan = as.factor(plan),
                .distr = as.integer(pl)) %>%
         as_tibble() %>%
         st_as_sf() %>%
         group_by(.distr) %>%
-        summarize(.plan = .plan[1], is_coverage=TRUE) %>%
+        summarize(.plan = .plan[1], is_coverage=coverage) %>%
     ggplot(aes(fill=.plan)) +
         geom_sf(size=0.0) +
         geom_sf(data=places, inherit.aes=FALSE, fill="#00000033", color=NA) +
