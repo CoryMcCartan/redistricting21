@@ -1,3 +1,5 @@
+# :stop_sign: SUPERSEDED: [50-State Redistricting Simulations](https://alarm-redist.github.io/fifty-states/)
+
 # 2021 Redistricting Analyses
 #### Christopher T. Kenny and Cory McCartan
 
